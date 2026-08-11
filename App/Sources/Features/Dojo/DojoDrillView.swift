@@ -10,6 +10,12 @@
 //  быстрее в написании и вреднее по сути: тренировка должна выглядеть ровно
 //  так, как выглядит игра, иначе навык не переносится.
 //
+//  По той же причине доска показывает кандидатов из `drill.solverGrid()`, а
+//  не одни цифры позиции. Решатель нашёл шаг, глядя на кандидатов, суженных
+//  предыдущими вычерками; экран без них показывал бы ДРУГУЮ позицию — с
+//  вернувшимися кандидатами и с более простым ходом, который игрок и найдёт
+//  вместо изучаемой техники.
+//
 //  Здесь НЕТ таймера, счёта и рейтинга. Тренировка — единственное место
 //  приложения, где ошибаться ничего не стоит; добавить сюда цену значит
 //  сделать её ещё одним местом, где страшно.
@@ -38,14 +44,32 @@ struct DojoDrillView: View {
         case pending, wrong, solved
     }
 
-    private var board: BoardState? { BoardState(givens: drill.position) }
+    /// Позиция упражнения глазами решателя: цифры И кандидаты с уже
+    /// накопленными вычерками.
+    ///
+    /// Одно значение на двоих — намеренно. 81 символ `drill.position`
+    /// выражает только цифры, а шаг был найден на суженных кандидатах.
+    /// Доска из одних цифр возвращает вычеркнутых кандидатов обратно, а
+    /// вместе с ними — тот более простой ход, который их и вычеркнул:
+    /// игрок ищет и находит его вместо изучаемой техники. Поэтому цифры
+    /// без кандидатов на экран не попадают ни при каких обстоятельствах.
+    private var position: (board: BoardState, candidates: [DigitMask])? {
+        guard let board = BoardState(givens: drill.position),
+              let grid = drill.solverGrid() else { return nil }
+        return (board, grid.candidates)
+    }
 
     var body: some View {
         VStack(spacing: 16) {
             header
-            if let board {
+            // `nil` здесь означает только одно: `drill.position` — не позиция
+            // (не 81 допустимый символ). Такой дрилл невозможно ни показать,
+            // ни решить, и доска не рисуется вовсе. Откатиться на «легальные
+            // по строке, столбцу и блоку» было бы хуже пустого экрана:
+            // получилась бы авторитетно выглядящая, но чужая позиция.
+            if let position {
                 BoardView(
-                    states: renderStates(board),
+                    states: renderStates(position.board, candidates: position.candidates),
                     palette: CellPalette(theme: theme),
                     thinLine: theme.current.thinLineWidth,
                     thickLine: theme.current.thickLineWidth,
@@ -79,6 +103,16 @@ struct DojoDrillView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
+            if !drill.priorEliminations.isEmpty {
+                // Оговорка появляется только там, где она правда. Если
+                // вычерков не было, пометки совпадают с «легальными по
+                // строке, столбцу и блоку», и фраза про вычеркнутое
+                // сбивала бы с толку на ровном месте.
+                Text(L.t("dojo.notesArePosition"))
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+                    .multilineTextAlignment(.center)
+            }
         }
     }
 
@@ -137,7 +171,8 @@ struct DojoDrillView: View {
 
     /// Состояния клеток строятся вручную: доска здесь статична, домашняя
     /// сессия не задействована и заводить её ради одного экрана незачем.
-    private func renderStates(_ board: BoardState) -> [CellRenderState] {
+    private func renderStates(_ board: BoardState,
+                              candidates: [DigitMask]) -> [CellRenderState] {
         let premises = Set(drill.premises)
         let selectedValue = selected.map { board[$0].value } ?? 0
         return (0..<81).map { index in
@@ -145,6 +180,18 @@ struct DojoDrillView: View {
             let cell = board[index]
             state.value = cell.value
             state.isGiven = cell.isGiven
+            // Кандидаты решателя едут в `assistedCandidates`, а не в
+            // `manualNotes`: игрок их не писал, и VoiceOver обязан называть
+            // их подсказанными. Рисует их та же `NotesGrid` игровой доски —
+            // второго пути для пометок в приложении нет и заводить его
+            // нельзя: тренировка должна выглядеть ровно как игра.
+            //
+            // Заполненные клетки пометок не получают сами собой: у решателя
+            // кандидаты поставленной клетки обнулены, а `CellView` при
+            // непустом значении рисует цифру, а не сетку заметок — как и в
+            // игре, где `assistedCandidates` считаются только для пустых.
+            state.assistedCandidates = candidates.indices.contains(index)
+                ? candidates[index] : 0
             state.isSelected = index == selected
             state.isSameDigit = cell.value != 0 && cell.value == selectedValue
             if let selected {
