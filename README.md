@@ -119,5 +119,23 @@ python3 Tools/verify_project.py       # 2903 проверки, ~2 с
 Работает на устройстве. Известные проблемы, следующие шаги и решения, которые
 пробовали и отвергли, — в [PROJECT_STATUS.md](PROJECT_STATUS.md).
 
-Сборка требует Xcode 26 и подписи разработчика; в `project.pbxproj` записан
-`DEVELOPMENT_TEAM` автора — при клонировании его нужно заменить своим.
+## Сборка
+
+Требуется Xcode 26 и iOS 18 SDK.
+
+```bash
+python3 Tools/generate_xcodeproj.py   # проект генерируется скриптом
+open NamiApp.xcodeproj
+```
+
+Для симулятора подпись не нужна. Для сборки на устройстве укажите свою
+команду разработчика — в репозитории её нет намеренно:
+
+```bash
+export NAMI_DEVELOPMENT_TEAM=XXXXXXXXXX
+python3 Tools/generate_xcodeproj.py
+```
+
+## Лицензия
+
+© 2026 artemoffM8. Код опубликован для ознакомления, см. [LICENSE](LICENSE).
