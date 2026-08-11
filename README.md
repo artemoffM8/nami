@@ -1,141 +1,145 @@
+> 🇷🇺 Русская версия: [README.ru.md](README.ru.md)
+
 # NAMI
 
-Судоку для iOS без тревожных механик: без обнуляемых серий, без таймера в лицо,
-без глобальных таблиц. Вместо них — рейтинг ясности, тренировка техник и
-календарь, который умеет только расти.
+An anxiety-free Sudoku for iOS: no streaks that reset, no timer in your face,
+no global leaderboards. Instead — a clarity rating, technique training, and a
+calendar that can only grow.
 
-SwiftUI + SwiftData, iOS 18+, Swift 5. Интерфейс на русском и английском.
-
----
-
-## Что здесь интересного с инженерной стороны
-
-Приложение написано вокруг трёх задач, каждая из которых оказалась сложнее, чем
-выглядит.
-
-### Оценка сложности, которой можно верить
-
-Решатель повторяет 21 человеческую технику — от `fullHouse` до `turbotFish`,
-включая три «прямых» варианта из Sudoku Explainer. Он не перебирает: он выводит,
-и рейтинг задачи равен сложности самой трудной техники, которая ей понадобилась.
-
-Проверен двумя свойствами, а не совпадением с чужой программой:
-
-- **корректность** — ни одного неверного вывода на 501 задаче;
-- **плотность** — ни одной завышенной оценки на 345 задачах каталога.
-
-Эталонная реализация на Python держится строка в строку со Swift-версией и
-сверяется регрессионным тестом. Академический ориентир — обзор Pelánek
-(arXiv 1403.7373), где показано, что технический рейтинг коррелирует со
-временем живых решателей примерно на 0.69; поэтому в приложении есть шов
-телеметрии, чтобы перекалибровать отображение `SE → D` на реальных данных.
-
-### Счёт, который совпадает бит в бит
-
-Ни одного `Double` на пути к итогу. Дробная арифметика может разойтись в
-последнем разряде между устройствами и версиями компилятора, а таблица лидеров
-обязана совпадать — поэтому весь счёт целочисленный с единственным округлением
-`roundHalfUp`.
-
-Бюджет очков нормализован по числу пустых клеток: иначе задачи с разной
-плотностью подсказок несопоставимы. Остаток бюджета раздаётся по **порядку
-награждения**, а не по номеру клетки — иначе игрок мог бы приберечь заранее
-известные «дорогие» клетки под высокий множитель.
-
-Штраф за подтверждённую ошибку по построению больше максимальной награды за
-один ход, так что перебор цифр имеет отрицательное ожидание. Это проверяется
-тестом, а не рассуждением.
-
-### Журнал вместо двух снимков
-
-Доска и счёт — проекции одной append-only истории. Раньше они сохранялись
-отдельно, и падение между двумя записями оставляло их в разных моментах партии:
-цифра на доске есть, очков за неё нет. Заметить это было нечем.
-
-Команда игрока пишется одной транзакцией. Внутри команды состояния заведомо
-расходятся, поэтому единица записи на диск — команда, а не событие; это
-выражено в API типом, а не комментарием. Undo восстанавливается точно, включая
-заметки, снятые автосокращением: журнал пишет намерение, а воспроизведение ведёт
-ту же `MoveHistory`, что и живая партия.
-
-### Тренировка на настоящих позициях
-
-Дрилл не генерируется случайным полем. Решатель прогоняет задачу каталога до
-момента, где впервые нужна изучаемая техника, — это состояние доски и есть
-упражнение. Позиция гарантированно достижима, задача проверена на единственность
-решения, а «техника здесь необходима» определяет тот же код, который оценивает
-сложность в игре.
+SwiftUI + SwiftData, iOS 18+, Swift 5. Localized in English and Russian.
 
 ---
 
-## Структура
+## What's interesting here, engineering-wise
 
-| Модуль | Строк | Содержимое |
+The app is built around three problems, each of which turned out to be harder
+than it looks.
+
+### A difficulty rating you can trust
+
+The solver reproduces 21 human techniques — from `fullHouse` to `turbotFish`,
+including the three "direct" variants from Sudoku Explainer. It doesn't
+brute-force: it deduces, and a puzzle's rating equals the difficulty of the
+hardest technique the puzzle required.
+
+Verified by two properties, not by agreement with someone else's program:
+
+- **correctness** — not a single wrong deduction across 501 puzzles;
+- **tightness** — not a single overestimated rating across the 345-puzzle catalog.
+
+A reference implementation in Python is kept line-for-line with the Swift
+version and guarded by a regression test. The academic anchor is Pelánek's
+survey (arXiv 1403.7373), which shows technique-based ratings correlate with
+real solvers' times at about 0.69 — which is why the app has a telemetry seam
+for recalibrating the `SE → D` mapping on real data.
+
+### Scoring that matches bit for bit
+
+Not a single `Double` on the path to the final score. Floating-point
+arithmetic can drift in the last digit across devices and compiler versions,
+and a leaderboard must match exactly — so all scoring is integer-only with a
+single `roundHalfUp` rounding.
+
+The score budget is normalized by the number of empty cells: puzzles with
+different given densities are otherwise incomparable. The budget remainder is
+distributed by **award order**, not by cell index — otherwise a player could
+hoard known "expensive" cells for a high multiplier.
+
+The penalty for a confirmed mistake is, by construction, larger than the
+maximum reward for a single move, so guessing digits has negative expected
+value. This is enforced by a test, not by an argument.
+
+### A journal instead of two snapshots
+
+The board and the score are projections of a single append-only history. They
+used to be saved separately, and a crash between the two writes left them at
+different moments of the game: the digit is on the board, the points for it
+are not. There was nothing to notice it with.
+
+A player command is written in one transaction. States legitimately diverge
+inside a command, so the unit of disk write is the command, not the event —
+expressed in the API by a type, not by a comment. Undo restores exactly,
+including notes removed by auto-reduction: the journal records intent, and
+replay drives the same `MoveHistory` as a live game.
+
+### Training on real positions
+
+A drill isn't generated from a random grid. The solver runs a catalog puzzle
+up to the first moment the studied technique is required — that board state
+is the exercise. The position is guaranteed to be reachable, the puzzle is
+verified to have a unique solution, and "the technique is required here" is
+decided by the same code that rates difficulty in the game.
+
+---
+
+## Structure
+
+| Module | Lines | Contents |
 |---|---:|---|
-| `Packages/NamiDomain` | 3 591 | Решатель, рейтинг, счёт, журнал, додзё. Только Foundation |
-| `Packages/NamiData` | 925 | SwiftData-модели и репозитории |
-| `Packages/NamiExperience` | 1 801 | Темы, звук, эффекты, анимации |
-| `App/Sources` | 5 023 | Экраны и оркестрация |
-| Тесты | 1 625 | 139 тестов, все в домене |
+| `Packages/NamiDomain` | 3,591 | Solver, rating, scoring, journal, dojo. Foundation only |
+| `Packages/NamiData` | 925 | SwiftData models and repositories |
+| `Packages/NamiExperience` | 1,801 | Themes, sound, effects, animations |
+| `App/Sources` | 5,023 | Screens and orchestration |
+| Tests | 1,625 | 139 tests, all in the domain |
 
-Домен не знает ни про UI, ни про хранилище, ни про локализацию: он возвращает
-ключи строк, а текст живёт в приложении.
+The domain knows nothing about UI, storage, or localization: it returns
+string keys, and the text lives in the app.
 
 ---
 
-## Проверка
+## Verification
 
 ```bash
-python3 Tools/generate_xcodeproj.py   # проект генерируется, не правится руками
-python3 Tools/verify_project.py       # 2903 проверки, ~2 с
+python3 Tools/generate_xcodeproj.py   # the project is generated, never hand-edited
+python3 Tools/verify_project.py       # 2,903 checks, ~2 s
 ```
 
-Верификатор — не линтер. В нём живут проверки классов ошибок, **которые не
-падают** и потому не ловятся тестами:
+The verifier is not a linter. It hosts checks for classes of errors **that
+don't crash** and therefore evade tests:
 
-- тестовый файл лежит на диске, но не включён в проект — тесты «проходят», не запустившись;
-- забытый `case` в `replay()` молча теряет часть истории;
-- живой RNG в отрисовке эффектов ломает воспроизводимость кадра;
-- недостающий файл звукового комплекта проявляется только тишиной;
-- техника в учебном плане, для которой в каталоге нет материала;
-- пять инвариантов честности счёта, найденных на ревью.
+- a test file exists on disk but isn't included in the project — tests "pass" without running;
+- a forgotten `case` in `replay()` silently drops part of the history;
+- a live RNG in effect rendering breaks frame reproducibility;
+- a missing sound-kit file manifests only as silence;
+- a technique in the curriculum with no material in the catalog;
+- five score-integrity invariants found in review.
 
-Каждая такая проверка появилась после реального дефекта, а не заранее.
-
----
-
-## Ресурсы
-
-Каталог — 345 задач с оценкой SE, размёткой по техникам и ожидаемым временем
-решения. Звук синтезирован кодом (FM-синтез, Karplus–Strong, реверберация
-Шрёдера), лицензионно чистый. Три тематических комплекта хранятся в CAF/ALAC:
-сжатие без потерь вчетверо, 55 → 14 МБ, PCM совпадает побайтово. AAC здесь не
-годится — он добавляет priming-тишину и ломает бесшовность лупов.
+Every one of these checks appeared after a real defect, not in advance.
 
 ---
 
-## Состояние
+## Assets
 
-Работает на устройстве. Известные проблемы, следующие шаги и решения, которые
-пробовали и отвергли, — в [PROJECT_STATUS.md](PROJECT_STATUS.md).
+The catalog is 345 puzzles with SE ratings, technique annotations and expected
+solve times. The audio is synthesized in code (FM synthesis, Karplus–Strong,
+Schroeder reverb) and is licensing-clean. Three themed sound kits are stored
+as CAF/ALAC: lossless 4× compression, 55 → 14 MB, PCM verified byte-for-byte.
+AAC won't do here — it adds priming silence and breaks seamless loops.
 
-## Сборка
+---
 
-Требуется Xcode 26 и iOS 18 SDK.
+## Status
+
+Runs on device. Known issues, next steps, and approaches tried and rejected
+are in [PROJECT_STATUS.md](PROJECT_STATUS.md) (in Russian).
+
+## Building
+
+Requires Xcode 26 and the iOS 18 SDK.
 
 ```bash
-python3 Tools/generate_xcodeproj.py   # проект генерируется скриптом
+python3 Tools/generate_xcodeproj.py   # the project is generated by a script
 open NamiApp.xcodeproj
 ```
 
-Для симулятора подпись не нужна. Для сборки на устройстве укажите свою
-команду разработчика — в репозитории её нет намеренно:
+No signing is needed for the simulator. To build for a device, provide your
+own development team — it is intentionally absent from the repository:
 
 ```bash
 export NAMI_DEVELOPMENT_TEAM=XXXXXXXXXX
 python3 Tools/generate_xcodeproj.py
 ```
 
-## Лицензия
+## License
 
-© 2026 artemoffM8. Код опубликован для ознакомления, см. [LICENSE](LICENSE).
+© 2026 artemoffM8. Source published for reference; see [LICENSE](LICENSE).
