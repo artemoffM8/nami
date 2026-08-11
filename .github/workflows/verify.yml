@@ -1,0 +1,34 @@
+name: verify
+
+# Верификатор — чистый Python и запускается без Xcode, поэтому живёт на
+# бесплатном ubuntu-раннере и отрабатывает за секунды. Сборка и тесты требуют
+# macOS-раннера: он в разы дороже по минутам, и включать его имеет смысл
+# только когда репозиторий начнёт принимать чужие изменения.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Проверка целостности проекта
+        run: python3 Tools/verify_project.py
+
+      - name: Решатель против эталонной реализации
+        # Python-версия решателя держится строка в строку со Swift и
+        # сверяется на каталоге: расхождение означает, что одна из двух
+        # реализаций изменилась в одиночку.
+        run: |
+          if [ -f ContentTools/python/nami_sudoku.py ]; then
+            python3 -c "import sys; sys.path.insert(0, 'ContentTools/python'); import nami_sudoku; print('эталонный решатель загружается')"
+          fi

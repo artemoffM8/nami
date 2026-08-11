@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "id": "novemi-session-score-v1",
+  "arithmeticVersion": "integer-half-up-v1",
+  "basePlacementBudget": 4000,
+  "difficultyFactor": {
+    "minimumPuzzleRating": 600,
+    "maximumPuzzleRating": 2400,
+    "factorDenominator": 1800000,
+    "baseFactorNumerator": 1800000,
+    "ratingDeltaNumeratorPerPoint": 350,
+    "minimumPermille": 1000,
+    "maximumPermille": 1350,
+    "rounding": "halfUp"
+  },
+  "cellBaseRemainderPolicy": "awardOrdinal",
+  "multiplierFormula": {
+    "basePermille": 1000,
+    "stepPermille": 100,
+    "maximumTier": 10,
+    "tierNumerator": 50,
+    "tierDenominator": 3
+  },
+  "bonuses": {
+    "completedGroupBase": 30,
+    "completedPuzzleBase": 400
+  },
+  "penalties": {
+    "confirmedError": {
+      "minimumPlacementBudgetBps": 300,
+      "meanCellBaseMultiplierPermille": 2500,
+      "perUniqueCellDigitAttempt": true
+    },
+    "manualCheckPlacementBudgetBps": 300,
+    "hintSessionPlacementBudgetBps": {
+      "area": 100,
+      "technique": 300,
+      "explanation": 600
+    },
+    "candidateAidPlacementBudgetBps": {
+      "neutral": 0,
+      "panel": 50,
+      "selectedCellLens": 100,
+      "persistentSelectedCell": 200,
+      "wholeBoard": 500
+    }
+  },
+  "streakMutation": {
+    "manualCheckReset": true,
+    "hintAreaDivideBy": 2,
+    "hintTechniqueReset": true,
+    "hintExplanationReset": true,
+    "confirmedErrorReset": true,
+    "wholeBoardCandidatesReset": true
+  },
+  "paceBonus": {
+    "maximumBonusBps": 1500,
+    "timeRatioRounding": "ceilPermille",
+    "tiers": [
+      {
+        "maximumTimeRatioPermille": 700,
+        "bonusBps": 1500
+      },
+      {
+        "maximumTimeRatioPermille": 850,
+        "bonusBps": 1000
+      },
+      {
+        "maximumTimeRatioPermille": 1000,
+        "bonusBps": 500
+      },
+      {
+        "maximumTimeRatioPermille": null,
+        "bonusBps": 0
+      }
+    ],
+    "ineligibleAfterManualCheck": true,
+    "ineligibleAfterAnyHint": true,
+    "ineligibleAfterCandidateAidAboveNeutral": true,
+    "ineligibleAfterConfirmedError": true,
+    "ineligibleAfterReveal": true
+  },
+  "limits": {
+    "minimumDisplayScore": 0,
+    "maximumDisplayScore": 999999,
+    "maximumConfirmedErrorStrikesForRecordedResult": 2,
+    "penaltyDebtEnabled": true
+  }
+}
+

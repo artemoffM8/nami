@@ -1,0 +1,1635 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+		8D932C72458AB9A77FAABEF2 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = AppRouter.swift;
+			sourceTree = "<group>";
+		};
+		6E6FCF4AC0ECC02F72BE66C8 = {
+			isa = PBXBuildFile;
+			fileRef = 8D932C72458AB9A77FAABEF2 /* AppRouter.swift */;
+		};
+		D673DFB61A78F5884902A337 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = NamiApp.swift;
+			sourceTree = "<group>";
+		};
+		B60300018D37C3F408810F34 = {
+			isa = PBXBuildFile;
+			fileRef = D673DFB61A78F5884902A337 /* NamiApp.swift */;
+		};
+		756801CCF0177EDC86B24EAB = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = DojoDrillView.swift;
+			sourceTree = "<group>";
+		};
+		81089A2287AEA450CEF6E7A4 = {
+			isa = PBXBuildFile;
+			fileRef = 756801CCF0177EDC86B24EAB /* DojoDrillView.swift */;
+		};
+		3EB7FA1906F3474F57DE6D8A = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = DojoView.swift;
+			sourceTree = "<group>";
+		};
+		05C5751825616910105957C8 = {
+			isa = PBXBuildFile;
+			fileRef = 3EB7FA1906F3474F57DE6D8A /* DojoView.swift */;
+		};
+		DBB5AB6B0858DFA79059A6E9 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = BoardView.swift;
+			sourceTree = "<group>";
+		};
+		ABB28163CFECACBE1815C26E = {
+			isa = PBXBuildFile;
+			fileRef = DBB5AB6B0858DFA79059A6E9 /* BoardView.swift */;
+		};
+		1BC76BCEB7CE04055FEC1659 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = GameSessionStore.swift;
+			sourceTree = "<group>";
+		};
+		1962F65A37A9549B911EA9D8 = {
+			isa = PBXBuildFile;
+			fileRef = 1BC76BCEB7CE04055FEC1659 /* GameSessionStore.swift */;
+		};
+		8412E3048762F236A19364A2 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = GameView.swift;
+			sourceTree = "<group>";
+		};
+		7248E160DF9026750B9A87E8 = {
+			isa = PBXBuildFile;
+			fileRef = 8412E3048762F236A19364A2 /* GameView.swift */;
+		};
+		8449AD89C52483C1899D0B4C = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = GuidanceViews.swift;
+			sourceTree = "<group>";
+		};
+		3AB1C3A260A27B8F05D1BEDA = {
+			isa = PBXBuildFile;
+			fileRef = 8449AD89C52483C1899D0B4C /* GuidanceViews.swift */;
+		};
+		4AE44A708F9E10477A2761FD = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = HintSheet.swift;
+			sourceTree = "<group>";
+		};
+		053CC9B29F06EFE32F1A1DA0 = {
+			isa = PBXBuildFile;
+			fileRef = 4AE44A708F9E10477A2761FD /* HintSheet.swift */;
+		};
+		7247FE672F27E22608197805 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = KeypadView.swift;
+			sourceTree = "<group>";
+		};
+		129ACBDCE36D85CA93F4FF33 = {
+			isa = PBXBuildFile;
+			fileRef = 7247FE672F27E22608197805 /* KeypadView.swift */;
+		};
+		CA7071D9F9C0CCFC81DBDDAC = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = ScoreHUD.swift;
+			sourceTree = "<group>";
+		};
+		9011CDBF48490F35E522A0FC = {
+			isa = PBXBuildFile;
+			fileRef = CA7071D9F9C0CCFC81DBDDAC /* ScoreHUD.swift */;
+		};
+		3E026F8519DD6F78FF36A0D9 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = HomeView.swift;
+			sourceTree = "<group>";
+		};
+		752ED6DA89E2A580A21DA35E = {
+			isa = PBXBuildFile;
+			fileRef = 3E026F8519DD6F78FF36A0D9 /* HomeView.swift */;
+		};
+		5DF7B84CB4AC10DFDF1E7866 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = OnboardingView.swift;
+			sourceTree = "<group>";
+		};
+		8E874CC45493DDD326BD0913 = {
+			isa = PBXBuildFile;
+			fileRef = 5DF7B84CB4AC10DFDF1E7866 /* OnboardingView.swift */;
+		};
+		09829F9BCD15587993AB9C8D = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = RankBadgeView.swift;
+			sourceTree = "<group>";
+		};
+		92C8ECB41C50A6ABBD207A55 = {
+			isa = PBXBuildFile;
+			fileRef = 09829F9BCD15587993AB9C8D /* RankBadgeView.swift */;
+		};
+		46D5DF230E524B2D39DA45BE = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = RankChangeOverlay.swift;
+			sourceTree = "<group>";
+		};
+		A6303B219D8EE4511FB021E5 = {
+			isa = PBXBuildFile;
+			fileRef = 46D5DF230E524B2D39DA45BE /* RankChangeOverlay.swift */;
+		};
+		25E2BC88BA8B5093E329726C = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = ResultView.swift;
+			sourceTree = "<group>";
+		};
+		7941E50629B8BB4801A5FF66 = {
+			isa = PBXBuildFile;
+			fileRef = 25E2BC88BA8B5093E329726C /* ResultView.swift */;
+		};
+		A64E4831D8CCF0C41935FB03 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = SettingsView.swift;
+			sourceTree = "<group>";
+		};
+		C5D17EA6300931667B2137C8 = {
+			isa = PBXBuildFile;
+			fileRef = A64E4831D8CCF0C41935FB03 /* SettingsView.swift */;
+		};
+		F4F1AE1A4A0A91CB3461AE72 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = GardenCalendarView.swift;
+			sourceTree = "<group>";
+		};
+		8965101E81DE66A9E2B9F93B = {
+			isa = PBXBuildFile;
+			fileRef = F4F1AE1A4A0A91CB3461AE72 /* GardenCalendarView.swift */;
+		};
+		EAAA89CFCBF89F52006BC6D2 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = RatingCurveView.swift;
+			sourceTree = "<group>";
+		};
+		8554E8EF59008D80AF7B854B = {
+			isa = PBXBuildFile;
+			fileRef = EAAA89CFCBF89F52006BC6D2 /* RatingCurveView.swift */;
+		};
+		DB0FD3529A9C7544EEE7CC3A = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = StatisticsView.swift;
+			sourceTree = "<group>";
+		};
+		EA5A781749C70A14F08A6EF0 = {
+			isa = PBXBuildFile;
+			fileRef = DB0FD3529A9C7544EEE7CC3A /* StatisticsView.swift */;
+		};
+		0CD3C8AD1A765A0978C82B01 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = Strings.swift;
+			sourceTree = "<group>";
+		};
+		F131D312FEB4971A334D467C = {
+			isa = PBXBuildFile;
+			fileRef = 0CD3C8AD1A765A0978C82B01 /* Strings.swift */;
+		};
+		850AE44D44AC1FE86453EC22 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = ThemedSurface.swift;
+			sourceTree = "<group>";
+		};
+		5F7860CC03FB2CE4D501C4D5 = {
+			isa = PBXBuildFile;
+			fileRef = 850AE44D44AC1FE86453EC22 /* ThemedSurface.swift */;
+		};
+		9CC2CC1F89E7DDD5CCD361E8 = {
+			isa = PBXFileReference;
+			lastKnownFileType = folder.assetcatalog;
+			path = Assets.xcassets;
+			sourceTree = "<group>";
+		};
+		A852465B7B5E725EE9F5882A = {
+			isa = PBXBuildFile;
+			fileRef = 9CC2CC1F89E7DDD5CCD361E8 /* Assets.xcassets */;
+		};
+		2E2590CF842EEA91C8543C23 = {
+			isa = PBXFileReference;
+			lastKnownFileType = text.json;
+			path = classic.json;
+			sourceTree = "<group>";
+		};
+		E722DE627249BD153292BE15 = {
+			isa = PBXBuildFile;
+			fileRef = 2E2590CF842EEA91C8543C23 /* classic.json */;
+		};
+		F6175C27E10E2D4D045D9409 = {
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.xml;
+			path = PrivacyInfo.xcprivacy;
+			sourceTree = "<group>";
+		};
+		C364E32785A0CD5BC3ACE2FC = {
+			isa = PBXBuildFile;
+			fileRef = F6175C27E10E2D4D045D9409 /* PrivacyInfo.xcprivacy */;
+		};
+		C7B2165205C45E0602EDF6A9 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.wav;
+			path = ambientLoop.wav;
+			sourceTree = "<group>";
+		};
+		274D84FD649EC5CBC20D4B92 = {
+			isa = PBXBuildFile;
+			fileRef = C7B2165205C45E0602EDF6A9 /* ambientLoop.wav */;
+		};
+		C23E79006F6CE2729159A099 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.wav;
+			path = cellSelected.wav;
+			sourceTree = "<group>";
+		};
+		B1778B55440E95FAB75B9770 = {
+			isa = PBXBuildFile;
+			fileRef = C23E79006F6CE2729159A099 /* cellSelected.wav */;
+		};
+		C00756F70BB9F2E80D534B20 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.wav;
+			path = cellSelected2.wav;
+			sourceTree = "<group>";
+		};
+		CE188F9908BC352B6650A6AA = {
+			isa = PBXBuildFile;
+			fileRef = C00756F70BB9F2E80D534B20 /* cellSelected2.wav */;
+		};
+		9BE954A8D092C76775E95601 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.wav;
+			path = cellSelected3.wav;
+			sourceTree = "<group>";
+		};
+		5982BF49B380BC9E69BD5EC0 = {
+			isa = PBXBuildFile;
+			fileRef = 9BE954A8D092C76775E95601 /* cellSelected3.wav */;
+		};
+		AE5AC0FD15781D1F9A054A75 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.wav;
+			path = cellSelected4.wav;
+			sourceTree = "<group>";
+		};
+		358B584F3013C6C31806E2A5 = {
+			isa = PBXBuildFile;
+			fileRef = AE5AC0FD15781D1F9A054A75 /* cellSelected4.wav */;
+		};
+		1762122AA23BADB6798AD743 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.wav;
+			path = conflict.wav;
+			sourceTree = "<group>";
+		};
+		4B9BE618F2A1CC86DCC428C6 = {
+			isa = PBXBuildFile;
+			fileRef = 1762122AA23BADB6798AD743 /* conflict.wav */;
+		};
+		2A43552B7B7EFD03E3C33814 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.wav;
+			path = conflict2.wav;
+			sourceTree = "<group>";
+		};
+		C7F058A4D18F60D7C983F062 = {
+			isa = PBXBuildFile;
+			fileRef = 2A43552B7B7EFD03E3C33814 /* conflict2.wav */;
+		};
+		DB62630E962CE6E7DFEEB4F4 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.wav;
+			path = conflict3.wav;
+			sourceTree = "<group>";
+		};
+		E899B392708AA6EBAFD53383 = {
+			isa = PBXBuildFile;
+			fileRef = DB62630E962CE6E7DFEEB4F4 /* conflict3.wav */;
+		};
+		B414AF86D8FCE7A436D1F75F = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = deepSpace__cellSelected.caf;
+			sourceTree = "<group>";
+		};
+		9A4794F74A74173CA58C3F0E = {
+			isa = PBXBuildFile;
+			fileRef = B414AF86D8FCE7A436D1F75F /* deepSpace__cellSelected.caf */;
+		};
+		BDD9FDCC32294051101BDE07 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = deepSpace__conflict.caf;
+			sourceTree = "<group>";
+		};
+		D7CB896E00BA9798C3B2B847 = {
+			isa = PBXBuildFile;
+			fileRef = BDD9FDCC32294051101BDE07 /* deepSpace__conflict.caf */;
+		};
+		D71E027764E885095470F901 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = deepSpace__digitErased.caf;
+			sourceTree = "<group>";
+		};
+		3C64BB98C50687DD15F5FC82 = {
+			isa = PBXBuildFile;
+			fileRef = D71E027764E885095470F901 /* deepSpace__digitErased.caf */;
+		};
+		BAEB882A06C867A638265102 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = deepSpace__digitPlaced.caf;
+			sourceTree = "<group>";
+		};
+		921B985490738C31217E610E = {
+			isa = PBXBuildFile;
+			fileRef = BAEB882A06C867A638265102 /* deepSpace__digitPlaced.caf */;
+		};
+		E575D7725646A5520B79E80A = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = deepSpace__groupCompleted.caf;
+			sourceTree = "<group>";
+		};
+		6C9759898DC8D36553BFD1E0 = {
+			isa = PBXBuildFile;
+			fileRef = E575D7725646A5520B79E80A /* deepSpace__groupCompleted.caf */;
+		};
+		5D47C1EA9BE96CCC2FE99F50 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = deepSpace__music_bass.caf;
+			sourceTree = "<group>";
+		};
+		D10EEC5BBB1C097348639952 = {
+			isa = PBXBuildFile;
+			fileRef = 5D47C1EA9BE96CCC2FE99F50 /* deepSpace__music_bass.caf */;
+		};
+		E62160DF572775A8811B7072 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = deepSpace__music_melody.caf;
+			sourceTree = "<group>";
+		};
+		A3432E2E53507038B107B7D4 = {
+			isa = PBXBuildFile;
+			fileRef = E62160DF572775A8811B7072 /* deepSpace__music_melody.caf */;
+		};
+		C4867CF88A8D1334BA7FF3E3 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = deepSpace__music_pad.caf;
+			sourceTree = "<group>";
+		};
+		500DC79F97FF4368ED0DB6A0 = {
+			isa = PBXBuildFile;
+			fileRef = C4867CF88A8D1334BA7FF3E3 /* deepSpace__music_pad.caf */;
+		};
+		A58421D044C6C5447DAC8DCA = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = deepSpace__music_texture.caf;
+			sourceTree = "<group>";
+		};
+		18EF7D70F40609FE439E9517 = {
+			isa = PBXBuildFile;
+			fileRef = A58421D044C6C5447DAC8DCA /* deepSpace__music_texture.caf */;
+		};
+		0C3CB09EF1B0A61326420EB4 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = deepSpace__noteToggled.caf;
+			sourceTree = "<group>";
+		};
+		6D7E49BC64B3EDCAFC93DCD4 = {
+			isa = PBXBuildFile;
+			fileRef = 0C3CB09EF1B0A61326420EB4 /* deepSpace__noteToggled.caf */;
+		};
+		D6AA5B9790604EBE2A9F4687 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = deepSpace__uiConfirm.caf;
+			sourceTree = "<group>";
+		};
+		040E144EDAB164ECFF74CA74 = {
+			isa = PBXBuildFile;
+			fileRef = D6AA5B9790604EBE2A9F4687 /* deepSpace__uiConfirm.caf */;
+		};
+		F31294018C4AF9EFA4B43B2E = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = deepSpace__victory.caf;
+			sourceTree = "<group>";
+		};
+		738ED2922125A7E5011A2BF3 = {
+			isa = PBXBuildFile;
+			fileRef = F31294018C4AF9EFA4B43B2E /* deepSpace__victory.caf */;
+		};
+		1660FC3B597B237ACB1A1692 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.wav;
+			path = digitErased.wav;
+			sourceTree = "<group>";
+		};
+		9AEC0617377B3CF1BD422727 = {
+			isa = PBXBuildFile;
+			fileRef = 1660FC3B597B237ACB1A1692 /* digitErased.wav */;
+		};
+		C90F2E916B3A7495E250A91E = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.wav;
+			path = digitErased2.wav;
+			sourceTree = "<group>";
+		};
+		5BB37A55A8EC25CF7191F9D8 = {
+			isa = PBXBuildFile;
+			fileRef = C90F2E916B3A7495E250A91E /* digitErased2.wav */;
+		};
+		74904D72A3F48FABAE6C27AC = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.wav;
+			path = digitErased3.wav;
+			sourceTree = "<group>";
+		};
+		86C3F027A31512AC211D568E = {
+			isa = PBXBuildFile;
+			fileRef = 74904D72A3F48FABAE6C27AC /* digitErased3.wav */;
+		};
+		3C54701A236CE0B210D1131F = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.wav;
+			path = digitErased4.wav;
+			sourceTree = "<group>";
+		};
+		210283B4AB6D90A2095B15E1 = {
+			isa = PBXBuildFile;
+			fileRef = 3C54701A236CE0B210D1131F /* digitErased4.wav */;
+		};
+		B8034FFBFB9219F778E2253E = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.wav;
+			path = digitPlaced.wav;
+			sourceTree = "<group>";
+		};
+		5AAB018C67C112FBF52EA8FE = {
+			isa = PBXBuildFile;
+			fileRef = B8034FFBFB9219F778E2253E /* digitPlaced.wav */;
+		};
+		94D6B9154430F34FCFAA9383 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.wav;
+			path = digitPlaced2.wav;
+			sourceTree = "<group>";
+		};
+		E7998E2CF9863B33F26566FB = {
+			isa = PBXBuildFile;
+			fileRef = 94D6B9154430F34FCFAA9383 /* digitPlaced2.wav */;
+		};
+		9BC4C7314812A1F9C7603C89 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.wav;
+			path = digitPlaced3.wav;
+			sourceTree = "<group>";
+		};
+		0F13C1846BB141AACEF65E2D = {
+			isa = PBXBuildFile;
+			fileRef = 9BC4C7314812A1F9C7603C89 /* digitPlaced3.wav */;
+		};
+		86C3CED069DBA0889B3CF78D = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.wav;
+			path = digitPlaced4.wav;
+			sourceTree = "<group>";
+		};
+		E0AF69D258102BE82B8DF728 = {
+			isa = PBXBuildFile;
+			fileRef = 86C3CED069DBA0889B3CF78D /* digitPlaced4.wav */;
+		};
+		FBFED50982C60A42A234C328 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = forestDawn__cellSelected.caf;
+			sourceTree = "<group>";
+		};
+		4CE3DE418AF4328E8B78ECC0 = {
+			isa = PBXBuildFile;
+			fileRef = FBFED50982C60A42A234C328 /* forestDawn__cellSelected.caf */;
+		};
+		FA56DD72AB2FDB263B28BDD2 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = forestDawn__conflict.caf;
+			sourceTree = "<group>";
+		};
+		B91D8D24835B088D8F53D496 = {
+			isa = PBXBuildFile;
+			fileRef = FA56DD72AB2FDB263B28BDD2 /* forestDawn__conflict.caf */;
+		};
+		E2211C99792C9051BDA0C048 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = forestDawn__digitErased.caf;
+			sourceTree = "<group>";
+		};
+		092A37F4526EFE54CE670443 = {
+			isa = PBXBuildFile;
+			fileRef = E2211C99792C9051BDA0C048 /* forestDawn__digitErased.caf */;
+		};
+		C768B1506D98B91793B1429F = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = forestDawn__digitPlaced.caf;
+			sourceTree = "<group>";
+		};
+		F387BDB31B35A74CE3000939 = {
+			isa = PBXBuildFile;
+			fileRef = C768B1506D98B91793B1429F /* forestDawn__digitPlaced.caf */;
+		};
+		0D54D99907A1468F22E4DBFF = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = forestDawn__groupCompleted.caf;
+			sourceTree = "<group>";
+		};
+		8DE7B723F676EE03142F8281 = {
+			isa = PBXBuildFile;
+			fileRef = 0D54D99907A1468F22E4DBFF /* forestDawn__groupCompleted.caf */;
+		};
+		B1771413E04A34C1B74CE0F6 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = forestDawn__music_bass.caf;
+			sourceTree = "<group>";
+		};
+		596314D30367A248737EBFF3 = {
+			isa = PBXBuildFile;
+			fileRef = B1771413E04A34C1B74CE0F6 /* forestDawn__music_bass.caf */;
+		};
+		EF22D1099FEEBD703BFF3CC9 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = forestDawn__music_melody.caf;
+			sourceTree = "<group>";
+		};
+		4C409C9C1221896BB84B0EDB = {
+			isa = PBXBuildFile;
+			fileRef = EF22D1099FEEBD703BFF3CC9 /* forestDawn__music_melody.caf */;
+		};
+		45B4C1AB022CA0F2EB090A7A = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = forestDawn__music_pad.caf;
+			sourceTree = "<group>";
+		};
+		2BB6CF8957033F9D7A9EE804 = {
+			isa = PBXBuildFile;
+			fileRef = 45B4C1AB022CA0F2EB090A7A /* forestDawn__music_pad.caf */;
+		};
+		67AF35D6B1AA6DD6C935CC5F = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = forestDawn__music_texture.caf;
+			sourceTree = "<group>";
+		};
+		33F1FDE64667E48739F427A0 = {
+			isa = PBXBuildFile;
+			fileRef = 67AF35D6B1AA6DD6C935CC5F /* forestDawn__music_texture.caf */;
+		};
+		95112870A625CFF70AEA89CF = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = forestDawn__noteToggled.caf;
+			sourceTree = "<group>";
+		};
+		FF88CD1DBCEE82E8CE2229BA = {
+			isa = PBXBuildFile;
+			fileRef = 95112870A625CFF70AEA89CF /* forestDawn__noteToggled.caf */;
+		};
+		54B891231555673BC64B2B46 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = forestDawn__uiConfirm.caf;
+			sourceTree = "<group>";
+		};
+		6454DF2E107A728EE2945B81 = {
+			isa = PBXBuildFile;
+			fileRef = 54B891231555673BC64B2B46 /* forestDawn__uiConfirm.caf */;
+		};
+		110C556976AC671A6C827444 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = forestDawn__victory.caf;
+			sourceTree = "<group>";
+		};
+		434B5587ACBF072DD5AE402C = {
+			isa = PBXBuildFile;
+			fileRef = 110C556976AC671A6C827444 /* forestDawn__victory.caf */;
+		};
+		86A1381050C40FFAF433AD01 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.wav;
+			path = groupCompleted.wav;
+			sourceTree = "<group>";
+		};
+		E5384F50990E80566CC90CF3 = {
+			isa = PBXBuildFile;
+			fileRef = 86A1381050C40FFAF433AD01 /* groupCompleted.wav */;
+		};
+		63828462624237862E25B8F1 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.wav;
+			path = groupCompleted2.wav;
+			sourceTree = "<group>";
+		};
+		0903410780AD8CEC3CC41999 = {
+			isa = PBXBuildFile;
+			fileRef = 63828462624237862E25B8F1 /* groupCompleted2.wav */;
+		};
+		1DB5890FF10567A28831C3E2 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.wav;
+			path = groupCompleted3.wav;
+			sourceTree = "<group>";
+		};
+		ADAAF45421C74C74D425B411 = {
+			isa = PBXBuildFile;
+			fileRef = 1DB5890FF10567A28831C3E2 /* groupCompleted3.wav */;
+		};
+		E9B48542BF4E7C295A3DA092 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.wav;
+			path = noteToggled.wav;
+			sourceTree = "<group>";
+		};
+		18E888DC7D537329CC5678F1 = {
+			isa = PBXBuildFile;
+			fileRef = E9B48542BF4E7C295A3DA092 /* noteToggled.wav */;
+		};
+		815DEAFD3187CFD0DC9C4800 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.wav;
+			path = noteToggled2.wav;
+			sourceTree = "<group>";
+		};
+		D7D4A894BECA6A766FBBFC81 = {
+			isa = PBXBuildFile;
+			fileRef = 815DEAFD3187CFD0DC9C4800 /* noteToggled2.wav */;
+		};
+		465462C0460CE860ADEA6053 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.wav;
+			path = noteToggled3.wav;
+			sourceTree = "<group>";
+		};
+		5C8E83E014B173D64352A91A = {
+			isa = PBXBuildFile;
+			fileRef = 465462C0460CE860ADEA6053 /* noteToggled3.wav */;
+		};
+		339BCC9ED4D79C57ED50CA8B = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.wav;
+			path = noteToggled4.wav;
+			sourceTree = "<group>";
+		};
+		F11EC0F13A6F18292BF63A6F = {
+			isa = PBXBuildFile;
+			fileRef = 339BCC9ED4D79C57ED50CA8B /* noteToggled4.wav */;
+		};
+		1D7C9D4C5EA3136658EE5EAE = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.wav;
+			path = uiConfirm.wav;
+			sourceTree = "<group>";
+		};
+		3F5DBE285A33D057D014F786 = {
+			isa = PBXBuildFile;
+			fileRef = 1D7C9D4C5EA3136658EE5EAE /* uiConfirm.wav */;
+		};
+		8E60FF3C1EFA5C268D543819 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.wav;
+			path = victory.wav;
+			sourceTree = "<group>";
+		};
+		B2CBB84C6D9F4E595C50BA45 = {
+			isa = PBXBuildFile;
+			fileRef = 8E60FF3C1EFA5C268D543819 /* victory.wav */;
+		};
+		951B709842369EE15CBD58D3 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = zenGarden__cellSelected.caf;
+			sourceTree = "<group>";
+		};
+		CE8600D6A2EDD7BF0D5E55DF = {
+			isa = PBXBuildFile;
+			fileRef = 951B709842369EE15CBD58D3 /* zenGarden__cellSelected.caf */;
+		};
+		9E19471C0B4292E565A40406 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = zenGarden__conflict.caf;
+			sourceTree = "<group>";
+		};
+		4ACD49F2ECC8AFA797C1A6CB = {
+			isa = PBXBuildFile;
+			fileRef = 9E19471C0B4292E565A40406 /* zenGarden__conflict.caf */;
+		};
+		B7DABCA1B2E3076D0D94E8BF = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = zenGarden__digitErased.caf;
+			sourceTree = "<group>";
+		};
+		230D15BCC9123A12114A6000 = {
+			isa = PBXBuildFile;
+			fileRef = B7DABCA1B2E3076D0D94E8BF /* zenGarden__digitErased.caf */;
+		};
+		D03797397A586F9ECD9DBA92 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = zenGarden__digitPlaced.caf;
+			sourceTree = "<group>";
+		};
+		5C055ABDE14EB11385A301D8 = {
+			isa = PBXBuildFile;
+			fileRef = D03797397A586F9ECD9DBA92 /* zenGarden__digitPlaced.caf */;
+		};
+		2E1EABA667D5CCA2026C0961 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = zenGarden__groupCompleted.caf;
+			sourceTree = "<group>";
+		};
+		E3B015447ED0AE59B23C370D = {
+			isa = PBXBuildFile;
+			fileRef = 2E1EABA667D5CCA2026C0961 /* zenGarden__groupCompleted.caf */;
+		};
+		B8AA5BF43D34B2C88C64F1A0 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = zenGarden__music_bass.caf;
+			sourceTree = "<group>";
+		};
+		60CD88FF303900F967517312 = {
+			isa = PBXBuildFile;
+			fileRef = B8AA5BF43D34B2C88C64F1A0 /* zenGarden__music_bass.caf */;
+		};
+		071FA20DB0C9D360CC83D55F = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = zenGarden__music_melody.caf;
+			sourceTree = "<group>";
+		};
+		7DE5798B152827327B7B1233 = {
+			isa = PBXBuildFile;
+			fileRef = 071FA20DB0C9D360CC83D55F /* zenGarden__music_melody.caf */;
+		};
+		F6FEC0571DC607A5A52FA143 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = zenGarden__music_pad.caf;
+			sourceTree = "<group>";
+		};
+		EFC5DF704259CFF0BA4A6BB6 = {
+			isa = PBXBuildFile;
+			fileRef = F6FEC0571DC607A5A52FA143 /* zenGarden__music_pad.caf */;
+		};
+		D892272B8DDBFA6EB2331910 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = zenGarden__music_texture.caf;
+			sourceTree = "<group>";
+		};
+		3ABA9C667AC7AC263D5FD4EC = {
+			isa = PBXBuildFile;
+			fileRef = D892272B8DDBFA6EB2331910 /* zenGarden__music_texture.caf */;
+		};
+		17D18305C668D9C3A3D602ED = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = zenGarden__noteToggled.caf;
+			sourceTree = "<group>";
+		};
+		12AA40847D0084FD928A576C = {
+			isa = PBXBuildFile;
+			fileRef = 17D18305C668D9C3A3D602ED /* zenGarden__noteToggled.caf */;
+		};
+		E4FA9F5E24FF5632DCF151F6 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = zenGarden__uiConfirm.caf;
+			sourceTree = "<group>";
+		};
+		711951B190C347385809BFBB = {
+			isa = PBXBuildFile;
+			fileRef = E4FA9F5E24FF5632DCF151F6 /* zenGarden__uiConfirm.caf */;
+		};
+		9AA7EC43276AA5BD06E535D7 = {
+			isa = PBXFileReference;
+			lastKnownFileType = audio.caf;
+			path = zenGarden__victory.caf;
+			sourceTree = "<group>";
+		};
+		90DE57582FB8CF4D445AD51A = {
+			isa = PBXBuildFile;
+			fileRef = 9AA7EC43276AA5BD06E535D7 /* zenGarden__victory.caf */;
+		};
+		E2640D3EB4B54311B46E4439 = {
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.xml;
+			path = Info.plist;
+			sourceTree = "<group>";
+		};
+		4B69CFD7C9DEA4C0D34B05F7 = {
+			isa = PBXGroup;
+			children = (
+				2E2590CF842EEA91C8543C23 /* classic.json */,
+			);
+			path = Puzzles;
+			sourceTree = "<group>";
+		};
+		3ABA92839279B7AC0A4EF395 = {
+			isa = PBXGroup;
+			children = (
+				C7B2165205C45E0602EDF6A9 /* ambientLoop.wav */,
+				C23E79006F6CE2729159A099 /* cellSelected.wav */,
+				C00756F70BB9F2E80D534B20 /* cellSelected2.wav */,
+				9BE954A8D092C76775E95601 /* cellSelected3.wav */,
+				AE5AC0FD15781D1F9A054A75 /* cellSelected4.wav */,
+				1762122AA23BADB6798AD743 /* conflict.wav */,
+				2A43552B7B7EFD03E3C33814 /* conflict2.wav */,
+				DB62630E962CE6E7DFEEB4F4 /* conflict3.wav */,
+				B414AF86D8FCE7A436D1F75F /* deepSpace__cellSelected.caf */,
+				BDD9FDCC32294051101BDE07 /* deepSpace__conflict.caf */,
+				D71E027764E885095470F901 /* deepSpace__digitErased.caf */,
+				BAEB882A06C867A638265102 /* deepSpace__digitPlaced.caf */,
+				E575D7725646A5520B79E80A /* deepSpace__groupCompleted.caf */,
+				5D47C1EA9BE96CCC2FE99F50 /* deepSpace__music_bass.caf */,
+				E62160DF572775A8811B7072 /* deepSpace__music_melody.caf */,
+				C4867CF88A8D1334BA7FF3E3 /* deepSpace__music_pad.caf */,
+				A58421D044C6C5447DAC8DCA /* deepSpace__music_texture.caf */,
+				0C3CB09EF1B0A61326420EB4 /* deepSpace__noteToggled.caf */,
+				D6AA5B9790604EBE2A9F4687 /* deepSpace__uiConfirm.caf */,
+				F31294018C4AF9EFA4B43B2E /* deepSpace__victory.caf */,
+				1660FC3B597B237ACB1A1692 /* digitErased.wav */,
+				C90F2E916B3A7495E250A91E /* digitErased2.wav */,
+				74904D72A3F48FABAE6C27AC /* digitErased3.wav */,
+				3C54701A236CE0B210D1131F /* digitErased4.wav */,
+				B8034FFBFB9219F778E2253E /* digitPlaced.wav */,
+				94D6B9154430F34FCFAA9383 /* digitPlaced2.wav */,
+				9BC4C7314812A1F9C7603C89 /* digitPlaced3.wav */,
+				86C3CED069DBA0889B3CF78D /* digitPlaced4.wav */,
+				FBFED50982C60A42A234C328 /* forestDawn__cellSelected.caf */,
+				FA56DD72AB2FDB263B28BDD2 /* forestDawn__conflict.caf */,
+				E2211C99792C9051BDA0C048 /* forestDawn__digitErased.caf */,
+				C768B1506D98B91793B1429F /* forestDawn__digitPlaced.caf */,
+				0D54D99907A1468F22E4DBFF /* forestDawn__groupCompleted.caf */,
+				B1771413E04A34C1B74CE0F6 /* forestDawn__music_bass.caf */,
+				EF22D1099FEEBD703BFF3CC9 /* forestDawn__music_melody.caf */,
+				45B4C1AB022CA0F2EB090A7A /* forestDawn__music_pad.caf */,
+				67AF35D6B1AA6DD6C935CC5F /* forestDawn__music_texture.caf */,
+				95112870A625CFF70AEA89CF /* forestDawn__noteToggled.caf */,
+				54B891231555673BC64B2B46 /* forestDawn__uiConfirm.caf */,
+				110C556976AC671A6C827444 /* forestDawn__victory.caf */,
+				86A1381050C40FFAF433AD01 /* groupCompleted.wav */,
+				63828462624237862E25B8F1 /* groupCompleted2.wav */,
+				1DB5890FF10567A28831C3E2 /* groupCompleted3.wav */,
+				E9B48542BF4E7C295A3DA092 /* noteToggled.wav */,
+				815DEAFD3187CFD0DC9C4800 /* noteToggled2.wav */,
+				465462C0460CE860ADEA6053 /* noteToggled3.wav */,
+				339BCC9ED4D79C57ED50CA8B /* noteToggled4.wav */,
+				1D7C9D4C5EA3136658EE5EAE /* uiConfirm.wav */,
+				8E60FF3C1EFA5C268D543819 /* victory.wav */,
+				951B709842369EE15CBD58D3 /* zenGarden__cellSelected.caf */,
+				9E19471C0B4292E565A40406 /* zenGarden__conflict.caf */,
+				B7DABCA1B2E3076D0D94E8BF /* zenGarden__digitErased.caf */,
+				D03797397A586F9ECD9DBA92 /* zenGarden__digitPlaced.caf */,
+				2E1EABA667D5CCA2026C0961 /* zenGarden__groupCompleted.caf */,
+				B8AA5BF43D34B2C88C64F1A0 /* zenGarden__music_bass.caf */,
+				071FA20DB0C9D360CC83D55F /* zenGarden__music_melody.caf */,
+				F6FEC0571DC607A5A52FA143 /* zenGarden__music_pad.caf */,
+				D892272B8DDBFA6EB2331910 /* zenGarden__music_texture.caf */,
+				17D18305C668D9C3A3D602ED /* zenGarden__noteToggled.caf */,
+				E4FA9F5E24FF5632DCF151F6 /* zenGarden__uiConfirm.caf */,
+				9AA7EC43276AA5BD06E535D7 /* zenGarden__victory.caf */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
+		934E3FC0F03ED7A2C5B30477 = {
+			isa = PBXGroup;
+			children = (
+				4B69CFD7C9DEA4C0D34B05F7 /* Puzzles */,
+				3ABA92839279B7AC0A4EF395 /* Sounds */,
+				9CC2CC1F89E7DDD5CCD361E8 /* Assets.xcassets */,
+				E2640D3EB4B54311B46E4439 /* Info.plist */,
+				F6175C27E10E2D4D045D9409 /* PrivacyInfo.xcprivacy */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		44245B1517549A99582C1978 = {
+			isa = PBXGroup;
+			children = (
+				8D932C72458AB9A77FAABEF2 /* AppRouter.swift */,
+				D673DFB61A78F5884902A337 /* NamiApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		81220C2973AF9C643EBCEC5E = {
+			isa = PBXGroup;
+			children = (
+				756801CCF0177EDC86B24EAB /* DojoDrillView.swift */,
+				3EB7FA1906F3474F57DE6D8A /* DojoView.swift */,
+			);
+			path = Dojo;
+			sourceTree = "<group>";
+		};
+		9148A9A2155440D9769FB778 = {
+			isa = PBXGroup;
+			children = (
+				DBB5AB6B0858DFA79059A6E9 /* BoardView.swift */,
+				1BC76BCEB7CE04055FEC1659 /* GameSessionStore.swift */,
+				8412E3048762F236A19364A2 /* GameView.swift */,
+				8449AD89C52483C1899D0B4C /* GuidanceViews.swift */,
+				4AE44A708F9E10477A2761FD /* HintSheet.swift */,
+				7247FE672F27E22608197805 /* KeypadView.swift */,
+				CA7071D9F9C0CCFC81DBDDAC /* ScoreHUD.swift */,
+			);
+			path = Game;
+			sourceTree = "<group>";
+		};
+		C30AA352BA782E6A9DD2A9FC = {
+			isa = PBXGroup;
+			children = (
+				3E026F8519DD6F78FF36A0D9 /* HomeView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		2BA1ACB72DD04D82CDD7A25A = {
+			isa = PBXGroup;
+			children = (
+				5DF7B84CB4AC10DFDF1E7866 /* OnboardingView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		927DBB468430E80B005DC09C = {
+			isa = PBXGroup;
+			children = (
+				09829F9BCD15587993AB9C8D /* RankBadgeView.swift */,
+				46D5DF230E524B2D39DA45BE /* RankChangeOverlay.swift */,
+			);
+			path = Rank;
+			sourceTree = "<group>";
+		};
+		7F94C22E3242EE3D37B350E6 = {
+			isa = PBXGroup;
+			children = (
+				25E2BC88BA8B5093E329726C /* ResultView.swift */,
+			);
+			path = Result;
+			sourceTree = "<group>";
+		};
+		19E6C8AD38F8D7383783CAC1 = {
+			isa = PBXGroup;
+			children = (
+				A64E4831D8CCF0C41935FB03 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		3422D979B5DA856534EBAC39 = {
+			isa = PBXGroup;
+			children = (
+				F4F1AE1A4A0A91CB3461AE72 /* GardenCalendarView.swift */,
+				EAAA89CFCBF89F52006BC6D2 /* RatingCurveView.swift */,
+				DB0FD3529A9C7544EEE7CC3A /* StatisticsView.swift */,
+			);
+			path = Statistics;
+			sourceTree = "<group>";
+		};
+		B8A8C7EE090988E21E06203C = {
+			isa = PBXGroup;
+			children = (
+				81220C2973AF9C643EBCEC5E /* Dojo */,
+				9148A9A2155440D9769FB778 /* Game */,
+				C30AA352BA782E6A9DD2A9FC /* Home */,
+				2BA1ACB72DD04D82CDD7A25A /* Onboarding */,
+				927DBB468430E80B005DC09C /* Rank */,
+				7F94C22E3242EE3D37B350E6 /* Result */,
+				19E6C8AD38F8D7383783CAC1 /* Settings */,
+				3422D979B5DA856534EBAC39 /* Statistics */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		E074935A81D4D54594832ECF = {
+			isa = PBXGroup;
+			children = (
+				0CD3C8AD1A765A0978C82B01 /* Strings.swift */,
+				850AE44D44AC1FE86453EC22 /* ThemedSurface.swift */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		A4DF4240FBDF3F2D9FFC6B2C = {
+			isa = PBXGroup;
+			children = (
+				44245B1517549A99582C1978 /* App */,
+				B8A8C7EE090988E21E06203C /* Features */,
+				E074935A81D4D54594832ECF /* Support */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		9532D208D5559B216C842EC7 = {
+			isa = PBXGroup;
+			children = (
+				934E3FC0F03ED7A2C5B30477 /* Resources */,
+				A4DF4240FBDF3F2D9FFC6B2C /* Sources */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		E647F5180123314BD15BE737 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = CoreRulesTests.swift;
+			sourceTree = "<group>";
+		};
+		0D579CDFFB18077AABE5424C = {
+			isa = PBXBuildFile;
+			fileRef = E647F5180123314BD15BE737 /* CoreRulesTests.swift */;
+		};
+		752B475F520D9F5F4E8D843D = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = DojoTests.swift;
+			sourceTree = "<group>";
+		};
+		6E791201D2445D46486B2163 = {
+			isa = PBXBuildFile;
+			fileRef = 752B475F520D9F5F4E8D843D /* DojoTests.swift */;
+		};
+		06C6B5CC19C27EEBD8959F19 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = JournalArchiveTests.swift;
+			sourceTree = "<group>";
+		};
+		2491D8E5AF4E0AABDF1AE7FA = {
+			isa = PBXBuildFile;
+			fileRef = 06C6B5CC19C27EEBD8959F19 /* JournalArchiveTests.swift */;
+		};
+		36B7EB7BA2EDEB605C9B2A91 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = RatingEngineTests.swift;
+			sourceTree = "<group>";
+		};
+		8EBC0C1FF1D5296BBADF052C = {
+			isa = PBXBuildFile;
+			fileRef = 36B7EB7BA2EDEB605C9B2A91 /* RatingEngineTests.swift */;
+		};
+		C235E76B092955B715055914 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = SessionJournalTests.swift;
+			sourceTree = "<group>";
+		};
+		C0405804C7C69CF528D060CC = {
+			isa = PBXBuildFile;
+			fileRef = C235E76B092955B715055914 /* SessionJournalTests.swift */;
+		};
+		00A5230279AE88BEC887FCA8 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = SessionScoreTests.swift;
+			sourceTree = "<group>";
+		};
+		81A25A28351E2E28ACC4627B = {
+			isa = PBXBuildFile;
+			fileRef = 00A5230279AE88BEC887FCA8 /* SessionScoreTests.swift */;
+		};
+		7A000EFEDEB63D284CB53886 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = SolverRegressionTests.swift;
+			sourceTree = "<group>";
+		};
+		575674E2BAA73CC7C6E1EF42 = {
+			isa = PBXBuildFile;
+			fileRef = 7A000EFEDEB63D284CB53886 /* SolverRegressionTests.swift */;
+		};
+		CF2C4DAFC7C5944243E80BDC = {
+			isa = PBXGroup;
+			children = (
+				E647F5180123314BD15BE737 /* CoreRulesTests.swift */,
+				752B475F520D9F5F4E8D843D /* DojoTests.swift */,
+				06C6B5CC19C27EEBD8959F19 /* JournalArchiveTests.swift */,
+				36B7EB7BA2EDEB605C9B2A91 /* RatingEngineTests.swift */,
+				C235E76B092955B715055914 /* SessionJournalTests.swift */,
+				00A5230279AE88BEC887FCA8 /* SessionScoreTests.swift */,
+				7A000EFEDEB63D284CB53886 /* SolverRegressionTests.swift */,
+			);
+			name = NamiDomainTests;
+			path = Packages/NamiDomain/Tests/NamiDomainTests;
+			sourceTree = "<group>";
+		};
+		524C1CAC40978D4049496EF4 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper;
+			path = NamiDomain;
+			sourceTree = "<group>";
+		};
+		63DDE12681EF9DD522BD570F = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/NamiDomain;
+		};
+		8728344FB4DFEBE5E50683C7 = {
+			isa = XCSwiftPackageProductDependency;
+			productName = NamiDomain;
+		};
+		C47D65CC345CCECB5443BD14 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper;
+			path = NamiData;
+			sourceTree = "<group>";
+		};
+		7A2E0A8A2670F7E516963889 = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/NamiData;
+		};
+		EB4154B872FC44FCA5942308 = {
+			isa = XCSwiftPackageProductDependency;
+			productName = NamiData;
+		};
+		2EF88C9AA25AF267EE87DBFF = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper;
+			path = NamiExperience;
+			sourceTree = "<group>";
+		};
+		B1B28C58E696B9A0023638BF = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/NamiExperience;
+		};
+		7607DE1E72A5BDB2269F2630 = {
+			isa = XCSwiftPackageProductDependency;
+			productName = NamiExperience;
+		};
+		67EF5E408AE5105FBD74767E = {
+			isa = PBXGroup;
+			children = (
+				524C1CAC40978D4049496EF4 /* NamiDomain */,
+				C47D65CC345CCECB5443BD14 /* NamiData */,
+				2EF88C9AA25AF267EE87DBFF /* NamiExperience */,
+			);
+			path = Packages;
+			sourceTree = "<group>";
+		};
+		E6FC57C251E9E1BEC1D3C0D2 = {
+			isa = PBXFileReference;
+			explicitFileType = wrapper.application;
+			includeInIndex = 0;
+			path = NamiApp.app;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B7480EC88B7F22D0A4757273 = {
+			isa = PBXFileReference;
+			explicitFileType = wrapper.cfbundle;
+			includeInIndex = 0;
+			path = NamiDomainTests.xctest;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		31A5E41A9BD04E385DB196E5 = {
+			isa = PBXGroup;
+			children = (
+				E6FC57C251E9E1BEC1D3C0D2 /* NamiApp.app */,
+				B7480EC88B7F22D0A4757273 /* NamiDomainTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E2258AA71B17E0A3529C6C95 = {
+			isa = PBXGroup;
+			children = (
+				9532D208D5559B216C842EC7 /* App */,
+				67EF5E408AE5105FBD74767E /* Packages */,
+				CF2C4DAFC7C5944243E80BDC /* NamiDomainTests */,
+				31A5E41A9BD04E385DB196E5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E9AC67C993D2511BDAD48561 = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E6FCF4AC0ECC02F72BE66C8 /* AppRouter.swift in Sources */,
+				B60300018D37C3F408810F34 /* NamiApp.swift in Sources */,
+				81089A2287AEA450CEF6E7A4 /* DojoDrillView.swift in Sources */,
+				05C5751825616910105957C8 /* DojoView.swift in Sources */,
+				ABB28163CFECACBE1815C26E /* BoardView.swift in Sources */,
+				1962F65A37A9549B911EA9D8 /* GameSessionStore.swift in Sources */,
+				7248E160DF9026750B9A87E8 /* GameView.swift in Sources */,
+				3AB1C3A260A27B8F05D1BEDA /* GuidanceViews.swift in Sources */,
+				053CC9B29F06EFE32F1A1DA0 /* HintSheet.swift in Sources */,
+				129ACBDCE36D85CA93F4FF33 /* KeypadView.swift in Sources */,
+				9011CDBF48490F35E522A0FC /* ScoreHUD.swift in Sources */,
+				752ED6DA89E2A580A21DA35E /* HomeView.swift in Sources */,
+				8E874CC45493DDD326BD0913 /* OnboardingView.swift in Sources */,
+				92C8ECB41C50A6ABBD207A55 /* RankBadgeView.swift in Sources */,
+				A6303B219D8EE4511FB021E5 /* RankChangeOverlay.swift in Sources */,
+				7941E50629B8BB4801A5FF66 /* ResultView.swift in Sources */,
+				C5D17EA6300931667B2137C8 /* SettingsView.swift in Sources */,
+				8965101E81DE66A9E2B9F93B /* GardenCalendarView.swift in Sources */,
+				8554E8EF59008D80AF7B854B /* RatingCurveView.swift in Sources */,
+				EA5A781749C70A14F08A6EF0 /* StatisticsView.swift in Sources */,
+				F131D312FEB4971A334D467C /* Strings.swift in Sources */,
+				5F7860CC03FB2CE4D501C4D5 /* ThemedSurface.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		483A0E0C9C74F0CBD6A612E6 = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A852465B7B5E725EE9F5882A /* Assets.xcassets in Resources */,
+				E722DE627249BD153292BE15 /* classic.json in Resources */,
+				C364E32785A0CD5BC3ACE2FC /* PrivacyInfo.xcprivacy in Resources */,
+				274D84FD649EC5CBC20D4B92 /* ambientLoop.wav in Resources */,
+				B1778B55440E95FAB75B9770 /* cellSelected.wav in Resources */,
+				CE188F9908BC352B6650A6AA /* cellSelected2.wav in Resources */,
+				5982BF49B380BC9E69BD5EC0 /* cellSelected3.wav in Resources */,
+				358B584F3013C6C31806E2A5 /* cellSelected4.wav in Resources */,
+				4B9BE618F2A1CC86DCC428C6 /* conflict.wav in Resources */,
+				C7F058A4D18F60D7C983F062 /* conflict2.wav in Resources */,
+				E899B392708AA6EBAFD53383 /* conflict3.wav in Resources */,
+				9A4794F74A74173CA58C3F0E /* deepSpace__cellSelected.caf in Resources */,
+				D7CB896E00BA9798C3B2B847 /* deepSpace__conflict.caf in Resources */,
+				3C64BB98C50687DD15F5FC82 /* deepSpace__digitErased.caf in Resources */,
+				921B985490738C31217E610E /* deepSpace__digitPlaced.caf in Resources */,
+				6C9759898DC8D36553BFD1E0 /* deepSpace__groupCompleted.caf in Resources */,
+				D10EEC5BBB1C097348639952 /* deepSpace__music_bass.caf in Resources */,
+				A3432E2E53507038B107B7D4 /* deepSpace__music_melody.caf in Resources */,
+				500DC79F97FF4368ED0DB6A0 /* deepSpace__music_pad.caf in Resources */,
+				18EF7D70F40609FE439E9517 /* deepSpace__music_texture.caf in Resources */,
+				6D7E49BC64B3EDCAFC93DCD4 /* deepSpace__noteToggled.caf in Resources */,
+				040E144EDAB164ECFF74CA74 /* deepSpace__uiConfirm.caf in Resources */,
+				738ED2922125A7E5011A2BF3 /* deepSpace__victory.caf in Resources */,
+				9AEC0617377B3CF1BD422727 /* digitErased.wav in Resources */,
+				5BB37A55A8EC25CF7191F9D8 /* digitErased2.wav in Resources */,
+				86C3F027A31512AC211D568E /* digitErased3.wav in Resources */,
+				210283B4AB6D90A2095B15E1 /* digitErased4.wav in Resources */,
+				5AAB018C67C112FBF52EA8FE /* digitPlaced.wav in Resources */,
+				E7998E2CF9863B33F26566FB /* digitPlaced2.wav in Resources */,
+				0F13C1846BB141AACEF65E2D /* digitPlaced3.wav in Resources */,
+				E0AF69D258102BE82B8DF728 /* digitPlaced4.wav in Resources */,
+				4CE3DE418AF4328E8B78ECC0 /* forestDawn__cellSelected.caf in Resources */,
+				B91D8D24835B088D8F53D496 /* forestDawn__conflict.caf in Resources */,
+				092A37F4526EFE54CE670443 /* forestDawn__digitErased.caf in Resources */,
+				F387BDB31B35A74CE3000939 /* forestDawn__digitPlaced.caf in Resources */,
+				8DE7B723F676EE03142F8281 /* forestDawn__groupCompleted.caf in Resources */,
+				596314D30367A248737EBFF3 /* forestDawn__music_bass.caf in Resources */,
+				4C409C9C1221896BB84B0EDB /* forestDawn__music_melody.caf in Resources */,
+				2BB6CF8957033F9D7A9EE804 /* forestDawn__music_pad.caf in Resources */,
+				33F1FDE64667E48739F427A0 /* forestDawn__music_texture.caf in Resources */,
+				FF88CD1DBCEE82E8CE2229BA /* forestDawn__noteToggled.caf in Resources */,
+				6454DF2E107A728EE2945B81 /* forestDawn__uiConfirm.caf in Resources */,
+				434B5587ACBF072DD5AE402C /* forestDawn__victory.caf in Resources */,
+				E5384F50990E80566CC90CF3 /* groupCompleted.wav in Resources */,
+				0903410780AD8CEC3CC41999 /* groupCompleted2.wav in Resources */,
+				ADAAF45421C74C74D425B411 /* groupCompleted3.wav in Resources */,
+				18E888DC7D537329CC5678F1 /* noteToggled.wav in Resources */,
+				D7D4A894BECA6A766FBBFC81 /* noteToggled2.wav in Resources */,
+				5C8E83E014B173D64352A91A /* noteToggled3.wav in Resources */,
+				F11EC0F13A6F18292BF63A6F /* noteToggled4.wav in Resources */,
+				3F5DBE285A33D057D014F786 /* uiConfirm.wav in Resources */,
+				B2CBB84C6D9F4E595C50BA45 /* victory.wav in Resources */,
+				CE8600D6A2EDD7BF0D5E55DF /* zenGarden__cellSelected.caf in Resources */,
+				4ACD49F2ECC8AFA797C1A6CB /* zenGarden__conflict.caf in Resources */,
+				230D15BCC9123A12114A6000 /* zenGarden__digitErased.caf in Resources */,
+				5C055ABDE14EB11385A301D8 /* zenGarden__digitPlaced.caf in Resources */,
+				E3B015447ED0AE59B23C370D /* zenGarden__groupCompleted.caf in Resources */,
+				60CD88FF303900F967517312 /* zenGarden__music_bass.caf in Resources */,
+				7DE5798B152827327B7B1233 /* zenGarden__music_melody.caf in Resources */,
+				EFC5DF704259CFF0BA4A6BB6 /* zenGarden__music_pad.caf in Resources */,
+				3ABA9C667AC7AC263D5FD4EC /* zenGarden__music_texture.caf in Resources */,
+				12AA40847D0084FD928A576C /* zenGarden__noteToggled.caf in Resources */,
+				711951B190C347385809BFBB /* zenGarden__uiConfirm.caf in Resources */,
+				90DE57582FB8CF4D445AD51A /* zenGarden__victory.caf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B365BE9502C3128F5D540532 = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0A8C1563F711067A735BF04 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		7C46D1CEB52230D64054BD2B = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B601AF321E07947AE3FBA1D2 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = App/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nami.sudoku;
+				DEVELOPMENT_TEAM = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		67BE6271DB9623FA97B46814 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = App/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nami.sudoku;
+				DEVELOPMENT_TEAM = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		E2B6DC45986E8AEE422DD0E5 = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D0A8C1563F711067A735BF04 /* Debug */,
+				7C46D1CEB52230D64054BD2B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4B6A72F3910C6630A105EC79 = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B601AF321E07947AE3FBA1D2 /* Debug */,
+				67BE6271DB9623FA97B46814 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4BF184C1E436A3B2ECE98A7E = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4B6A72F3910C6630A105EC79 /* Build configuration list for PBXNativeTarget "NamiApp" */;
+			buildPhases = (
+				E9AC67C993D2511BDAD48561 /* Sources */,
+				B365BE9502C3128F5D540532 /* Frameworks */,
+				483A0E0C9C74F0CBD6A612E6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NamiApp;
+			packageProductDependencies = (
+				8728344FB4DFEBE5E50683C7 /* NamiDomain */,
+				EB4154B872FC44FCA5942308 /* NamiData */,
+				7607DE1E72A5BDB2269F2630 /* NamiExperience */,
+			);
+			productName = NamiApp;
+			productReference = E6FC57C251E9E1BEC1D3C0D2 /* NamiApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+		BA71AA701D1701266A3BB39B = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0D579CDFFB18077AABE5424C /* CoreRulesTests.swift in Sources */,
+				6E791201D2445D46486B2163 /* DojoTests.swift in Sources */,
+				2491D8E5AF4E0AABDF1AE7FA /* JournalArchiveTests.swift in Sources */,
+				8EBC0C1FF1D5296BBADF052C /* RatingEngineTests.swift in Sources */,
+				C0405804C7C69CF528D060CC /* SessionJournalTests.swift in Sources */,
+				81A25A28351E2E28ACC4627B /* SessionScoreTests.swift in Sources */,
+				575674E2BAA73CC7C6E1EF42 /* SolverRegressionTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D5743279D08ACDD7FBFFFDE3 = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		540A7B456ACFEDFB9B324507 = {
+			isa = XCSwiftPackageProductDependency;
+			productName = NamiDomain;
+		};
+		1454A24B9FA0753BF8AD48E7 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nami.sudoku.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		DA2F0ECFD563BB830E6D88A6 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nami.sudoku.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		AF2C7B76375F8BB98E91D5CE = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1454A24B9FA0753BF8AD48E7 /* Debug */,
+				DA2F0ECFD563BB830E6D88A6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8F9B3234DCB1DF350910081E = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AF2C7B76375F8BB98E91D5CE /* Build configuration list for PBXNativeTarget "NamiDomainTests" */;
+			buildPhases = (
+				BA71AA701D1701266A3BB39B /* Sources */,
+				D5743279D08ACDD7FBFFFDE3 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NamiDomainTests;
+			packageProductDependencies = (
+				540A7B456ACFEDFB9B324507 /* NamiDomain */,
+			);
+			productName = NamiDomainTests;
+			productReference = B7480EC88B7F22D0A4757273 /* NamiDomainTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		293A2BB6023B22EAA381B4E6 = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					4BF184C1E436A3B2ECE98A7E = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					8F9B3234DCB1DF350910081E = {
+						CreatedOnToolsVersion = 16.0;
+					};
+				};
+			};
+			buildConfigurationList = E2B6DC45986E8AEE422DD0E5 /* Build configuration list for PBXProject "NamiApp" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = ru;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				ru,
+				en,
+				Base,
+			);
+			mainGroup = E2258AA71B17E0A3529C6C95;
+			packageReferences = (
+				63DDE12681EF9DD522BD570F /* XCLocalSwiftPackageReference Packages/NamiDomain */,
+				7A2E0A8A2670F7E516963889 /* XCLocalSwiftPackageReference Packages/NamiData */,
+				B1B28C58E696B9A0023638BF /* XCLocalSwiftPackageReference Packages/NamiExperience */,
+			);
+			productRefGroup = 31A5E41A9BD04E385DB196E5 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4BF184C1E436A3B2ECE98A7E /* NamiApp */,
+				8F9B3234DCB1DF350910081E /* NamiDomainTests */,
+			);
+		};
+	};
+	rootObject = 293A2BB6023B22EAA381B4E6 /* Project object */;
+}
