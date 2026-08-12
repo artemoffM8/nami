@@ -8,6 +8,14 @@ calendar that can only grow.
 
 SwiftUI + SwiftData, iOS 18+, Swift 5. Localized in English and Russian.
 
+| Home | Game | Layered hint | Technique path | Drill |
+|---|---|---|---|---|
+| <img src="docs/screenshots/01-home.png" width="150" alt="Home screen"> | <img src="docs/screenshots/02-board.png" width="150" alt="Sudoku board"> | <img src="docs/screenshots/03-hint.png" width="150" alt="Layered hint"> | <img src="docs/screenshots/04-dojo.png" width="150" alt="Technique curriculum"> | <img src="docs/screenshots/05-drill.png" width="150" alt="Training drill"> |
+
+The drill board shows the candidates the solver actually had at that point —
+not the ones you would derive from the digits alone. That distinction is the
+whole reason the training is worth anything; see below.
+
 ---
 
 ## What's interesting here, engineering-wise
@@ -80,7 +88,7 @@ decided by the same code that rates difficulty in the game.
 | `Packages/NamiData` | 925 | SwiftData models and repositories |
 | `Packages/NamiExperience` | 1,801 | Themes, sound, effects, animations |
 | `App/Sources` | 5,023 | Screens and orchestration |
-| Tests | 1,625 | 139 tests, all in the domain |
+| Tests | 1,625 | 176 tests: the domain, plus progress integrity in the storage layer |
 
 The domain knows nothing about UI, storage, or localization: it returns
 string keys, and the text lives in the app.
@@ -91,7 +99,7 @@ string keys, and the text lives in the app.
 
 ```bash
 python3 Tools/generate_xcodeproj.py   # the project is generated, never hand-edited
-python3 Tools/verify_project.py       # 2,903 checks, ~2 s
+python3 Tools/verify_project.py       # 2,913 checks, ~2 s
 ```
 
 The verifier is not a linter. It hosts checks for classes of errors **that
