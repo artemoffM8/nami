@@ -142,6 +142,58 @@ public struct RatingSnapshot: Codable, Equatable, Sendable {
     public var isCalibrating: Bool { calibrationRatedCount < RatingEngine.calibrationCount }
     public var bestTier: RankTier? { bestDivision?.tier }
 
+    // MARK: - Чтение сохранённых байтов
+
+    private enum CodingKeys: String, CodingKey {
+        case rating
+        case ratingDivision
+        case displayDivision
+        case bestDivision
+        case calibrationRatedCount
+        case confirmationWindow
+        case rankStabilityVersion
+        case lastAppliedRatedResultID
+        case pendingProgressEvent
+    }
+
+    /// Декодер написан руками ради одного различия: отсутствующий ключ — это
+    /// СТАРАЯ форма snapshot, а не повреждение.
+    ///
+    /// Синтезированный `init(from:)` требует все ключи, и первый же новый
+    /// обязательный член структуры (а `currentStabilityVersion` = 2 говорит,
+    /// что она развивается) превратил бы каждый уже сохранённый профиль в
+    /// `.unreadable` — то есть в вечную заморозку записи. Здесь каждый ключ
+    /// читается через `decodeIfPresent` с тем же значением по умолчанию, что
+    /// и в обычном `init`, поэтому `.unreadable` означает ровно «эти байты не
+    /// разбираются», а не «профиль записан прежней версией приложения».
+    ///
+    /// Значение, которое ЕСТЬ, но имеет неверный тип, по-прежнему ошибка:
+    /// подставлять умолчание вместо испорченного рейтинга — это и есть
+    /// молчаливая потеря прогресса.
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let rating = try container.decodeIfPresent(Int.self, forKey: .rating)
+            ?? RatingEngine.startingRating
+        self.rating = rating
+        self.ratingDivision = try container.decodeIfPresent(
+            RankDivision.self, forKey: .ratingDivision) ?? RankDivision.forRating(rating)
+        self.displayDivision = try container.decodeIfPresent(
+            RankDivision.self, forKey: .displayDivision)
+        self.bestDivision = try container.decodeIfPresent(
+            RankDivision.self, forKey: .bestDivision)
+        self.calibrationRatedCount = try container.decodeIfPresent(
+            Int.self, forKey: .calibrationRatedCount) ?? 0
+        self.confirmationWindow = try container.decodeIfPresent(
+            [Int].self, forKey: .confirmationWindow) ?? []
+        // Поля нет — значит байты писались до появления версии, то есть первой.
+        self.rankStabilityVersion = try container.decodeIfPresent(
+            Int.self, forKey: .rankStabilityVersion) ?? 1
+        self.lastAppliedRatedResultID = try container.decodeIfPresent(
+            String.self, forKey: .lastAppliedRatedResultID)
+        self.pendingProgressEvent = try container.decodeIfPresent(
+            PendingProgressEvent.self, forKey: .pendingProgressEvent)
+    }
+
     /// «Подтверждение повышения: N/3» — самый длинный хвост окна выше следующего порога.
     public func promotionConfirmationProgress() -> Int? {
         guard let display = displayDivision, display.index < 14 else { return nil }
@@ -162,6 +214,67 @@ public struct RatingSnapshot: Codable, Equatable, Sendable {
             if value < threshold { count += 1 } else { break }
         }
         return count > 0 ? min(count, 3) : nil
+    }
+}
+
+// MARK: - Хранение snapshot
+
+/// Перевод рейтингового snapshot в байты и обратно — с различением
+/// «данных ещё нет» и «данные не прочитались».
+///
+/// Зачем отдельный тип и почему он в домене — по той же причине, что и
+/// `JournalArchive`. Слой хранения сводил оба случая к одному
+/// `?? RatingSnapshot()`, и повреждённые байты молча превращались в игрока
+/// без рейтинга, ранга и калибровки. Разницу между «профиля ещё не было» и
+/// «профиль не читается» обязана решать та часть кода, которую можно
+/// прогнать тестами, поэтому решение принимается здесь, а в `NamiData`
+/// остаётся только чтение и запись байтов.
+///
+/// Формат намеренно совпадает с прежним: `JSONEncoder` с `.sortedKeys` и
+/// обычный `JSONDecoder`. Уже сохранённые профили читаются байт в байт так же.
+public enum RatingSnapshotArchive {
+
+    /// Что удалось прочитать.
+    public enum Restoration: Equatable, Sendable {
+        /// Байтов нет — профиль ещё не писался. Стартовый snapshot здесь
+        /// не потеря, а правильный ответ.
+        case empty
+        /// Snapshot прочитан.
+        case restored(RatingSnapshot)
+        /// Байты есть, но не разбираются. Это повреждение, а не первый запуск:
+        /// перезаписывать их нельзя.
+        case unreadable(reason: String)
+    }
+
+    public enum ArchiveError: Error, Equatable, Sendable, CustomStringConvertible {
+        case encodingFailed(String)
+
+        public var description: String {
+            switch self {
+            case .encodingFailed(let reason): "snapshot не закодировался: \(reason)"
+            }
+        }
+    }
+
+    /// Бросает вместо возврата пустых `Data`: пустые байты не расшифруются,
+    /// и одна ошибка кодирования обнулила бы рейтинг молча.
+    public static func encode(_ snapshot: RatingSnapshot) throws -> Data {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys]
+        do {
+            return try encoder.encode(snapshot)
+        } catch {
+            throw ArchiveError.encodingFailed("\(error)")
+        }
+    }
+
+    public static func restore(_ data: Data) -> Restoration {
+        guard !data.isEmpty else { return .empty }
+        do {
+            return .restored(try JSONDecoder().decode(RatingSnapshot.self, from: data))
+        } catch {
+            return .unreadable(reason: "snapshot не разобрался: \(error)")
+        }
     }
 }
 

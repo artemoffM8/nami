@@ -312,6 +312,113 @@ final class RankStabilityTests: XCTestCase {
     }
 }
 
+/// Чтение рейтингового snapshot — второе место после журнала, где ошибка
+/// молчит: прежний `?? RatingSnapshot()` не отличал «профиля ещё не было»
+/// от «профиль не читается», и повреждённые байты обнуляли историю игрока.
+final class RatingSnapshotArchiveTests: XCTestCase {
+
+    private func played() -> RatingSnapshot {
+        RatingSnapshot(
+            rating: 1480,
+            displayDivision: RankDivision(index: 7),
+            bestDivision: RankDivision(index: 8),
+            calibrationRatedCount: 17,
+            confirmationWindow: [1440, 1460, 1480],
+            lastAppliedRatedResultID: "p-042|1700000000.0",
+            pendingProgressEvent: PendingProgressEvent(
+                kind: .rankPromoted, fromDivision: 7, toDivision: 8)
+        )
+    }
+
+    // MARK: - Счастливый путь
+
+    func testRoundTripKeepsEveryField() throws {
+        let snapshot = played()
+        let restored = RatingSnapshotArchive.restore(try RatingSnapshotArchive.encode(snapshot))
+        XCTAssertEqual(restored, .restored(snapshot))
+    }
+
+    // MARK: - Первый запуск против повреждения
+
+    /// Ради этого всё и делалось. Пустые байты — нормальный первый запуск,
+    /// и стартовый snapshot здесь правильный ответ.
+    func testEmptyDataIsFirstLaunchNotCorruption() {
+        XCTAssertEqual(RatingSnapshotArchive.restore(Data()), .empty)
+    }
+
+    /// А непустые байты, которые не разбираются, первым запуском называть
+    /// нельзя: именно так рейтинг и обнулялся молча.
+    ///
+    /// `{}` из этого списка убран намеренно. Пустой объект — это не мусор, а
+    /// snapshot старой формы: все ключи отсутствуют. Считать его повреждением
+    /// значит замораживать запись каждому, кто обновился с версии без нового
+    /// поля, — а такая заморозка, в отличие от прежнего молчаливого сброса,
+    /// сама не проходит. Разбор `{}` проверяется ниже отдельно.
+    func testCorruptedDataIsNotReportedAsEmpty() {
+        for payload in ["не json", "{\"rating\":", "[1,2,3]", "null",
+                        "{\"rating\":\"1480\"}"] {
+            let data = Data(payload.utf8)
+            XCTAssertFalse(data.isEmpty, "иначе случай вырождается в первый запуск")
+            guard case .unreadable = RatingSnapshotArchive.restore(data) else {
+                return XCTFail("«\(payload)» прочитано не как повреждение: "
+                               + "\(RatingSnapshotArchive.restore(data))")
+            }
+        }
+    }
+
+    /// Отсутствующий ключ — это прежняя форма snapshot, а не повреждение.
+    /// Синтезированный декодер требовал все ключи, и первый же новый
+    /// обязательный член структуры заморозил бы запись всем сохранённым
+    /// профилям навсегда. Проверяется и вырожденный случай `{}`.
+    func testMissingKeysReadAsOlderShapeNotCorruption() throws {
+        let full = try RatingSnapshotArchive.encode(played())
+        var object = try XCTUnwrap(JSONSerialization.jsonObject(with: full) as? [String: Any])
+        XCTAssertNotNil(object.removeValue(forKey: "rankStabilityVersion"),
+                        "ключа нет — тест ничего не проверяет")
+        let older = try JSONSerialization.data(withJSONObject: object)
+
+        guard case .restored(let restored) = RatingSnapshotArchive.restore(older) else {
+            return XCTFail("snapshot прежней формы объявлен повреждением")
+        }
+        XCTAssertEqual(restored.rating, played().rating)
+        XCTAssertEqual(restored.displayDivision, played().displayDivision)
+        XCTAssertEqual(restored.confirmationWindow, played().confirmationWindow)
+        // Версии в байтах не было — значит они первой.
+        XCTAssertEqual(restored.rankStabilityVersion, 1)
+
+        // Пустой объект — предельный случай той же старой формы: стартовые
+        // значения и версия «до появления версий».
+        XCTAssertEqual(RatingSnapshotArchive.restore(Data("{}".utf8)),
+                       .restored(RatingSnapshot(rankStabilityVersion: 1)))
+    }
+
+    /// Обрезанный хвост — самый частый вид повреждения записи.
+    func testTruncatedPayloadIsUnreadable() throws {
+        let data = try RatingSnapshotArchive.encode(played())
+        let truncated = data.prefix(data.count - 5)
+        XCTAssertGreaterThan(truncated.count, 0)
+        guard case .unreadable = RatingSnapshotArchive.restore(Data(truncated)) else {
+            return XCTFail("обрезанный snapshot прочитан как целый или как пустой")
+        }
+    }
+
+    // MARK: - Совместимость с уже сохранёнными профилями
+
+    /// Архив обязан читать байты, записанные прежним кодом, иначе установка,
+    /// которая сегодня в порядке, после обновления увидит «повреждение» и
+    /// заморозит запись. Прежний код — `JSONEncoder` с `.sortedKeys`.
+    func testReadsBytesWrittenByPreviousEncoder() throws {
+        let snapshot = played()
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys]
+        let legacy = try encoder.encode(snapshot)
+
+        XCTAssertEqual(RatingSnapshotArchive.restore(legacy), .restored(snapshot))
+        // И пишет ровно те же байты: обновление не меняет содержимое профиля.
+        XCTAssertEqual(try RatingSnapshotArchive.encode(snapshot), legacy)
+    }
+}
+
 final class TimingTests: XCTestCase {
 
     /// Обёртка над устаревшей формулой Daily. Она больше не применяется к

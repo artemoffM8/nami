@@ -16,27 +16,67 @@ import NamiExperience
 @main
 struct NamiApp: App {
 
-    @State private var dependencies: Dependencies
+    @State private var launch: Launch
 
     init() {
-        _dependencies = State(initialValue: Dependencies.bootstrap())
+        _launch = State(initialValue: Dependencies.bootstrap())
     }
 
     var body: some Scene {
         WindowGroup {
-            RootView()
-                // Смена языка перестраивает дерево: строки берутся из словаря
-                // в момент отрисовки, поэтому иначе экран останется на старом.
-                // Роутер и сессия живут в environment и переживают пересборку.
-                .id(dependencies.preferences.language)
-                .environment(dependencies.router)
-                .environment(dependencies.theme)
-                .environment(dependencies.preferences)
-                .environment(dependencies.feedback)
-                .environment(dependencies.music)
-                .environment(dependencies.sound)
-                .modelContainer(dependencies.container)
+            switch launch {
+            case .ready(let dependencies):
+                RootView()
+                    // Смена языка перестраивает дерево: строки берутся из словаря
+                    // в момент отрисовки, поэтому иначе экран останется на старом.
+                    // Роутер и сессия живут в environment и переживают пересборку.
+                    .id(dependencies.preferences.language)
+                    .environment(dependencies.router)
+                    .environment(dependencies.theme)
+                    .environment(dependencies.preferences)
+                    .environment(dependencies.feedback)
+                    .environment(dependencies.music)
+                    .environment(dependencies.sound)
+                    .modelContainer(dependencies.container)
+            case .storageUnavailable(let reason):
+                StorageUnavailableView(reason: reason)
+            }
         }
+    }
+}
+
+/// Что получилось на запуске. Отдельное состояние нужно ровно для одного
+/// случая: хранилище не открылось совсем. Раньше здесь стоял `try!`, и
+/// единственным исходом было падение.
+@MainActor
+enum Launch {
+    case ready(Dependencies)
+    case storageUnavailable(reason: String)
+}
+
+/// Хранилище не открылось ни на диске, ни в памяти. Честный экран лучше
+/// падения и намного лучше «нового» приложения без единой записи: игрок
+/// должен знать, что его данные на месте, а не удалены.
+struct StorageUnavailableView: View {
+
+    let reason: String
+
+    var body: some View {
+        VStack(spacing: 14) {
+            Image(systemName: "externaldrive.badge.exclamationmark")
+                .font(.system(size: 40, weight: .light))
+            Text("Хранилище недоступно")
+                .font(.title3)
+            Text("Данные на устройстве не удалены. Перезапустите приложение; если это не поможет — обновите его до последней версии.")
+                .font(.callout)
+                .multilineTextAlignment(.center)
+            Text(reason)
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .padding(28)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
@@ -77,6 +117,10 @@ struct RootView: View {
         .modifier(FeedbackSync(apply: syncFeedbackSettings))
         .modifier(MusicSync(apply: syncMusic, stop: music.stop))
         .modifier(SoundKitSync(apply: syncSoundKit))
+        // Предупреждение живёт здесь, а не на главном экране: сбой хранилища
+        // отправляет игрока на онбординг (база пуста), и на главный экран он
+        // может не попасть вовсе — а узнать о потере записи обязан.
+        .modifier(StartupWarningAlert())
         // Возврат из фона обязан поднимать движок звука. Система его
         // останавливает молча, и без этого звуки пропадают до перезапуска
         // приложения — ровно то, что и происходило.
@@ -148,6 +192,24 @@ private struct SoundKitSync: ViewModifier {
     }
 }
 
+/// Показывает предупреждение запуска на любом экране.
+private struct StartupWarningAlert: ViewModifier {
+
+    @Environment(AppRouter.self) private var router
+
+    func body(content: Content) -> some View {
+        content.alert(
+            router.startupWarning ?? "",
+            isPresented: Binding(
+                get: { router.startupWarning != nil },
+                set: { if !$0 { router.dismissWarning() } }
+            )
+        ) {
+            Button(L.t("common.close")) { router.dismissWarning() }
+        }
+    }
+}
+
 /// Включает и глушит фоновую музыку.
 private struct MusicSync: ViewModifier {
 
@@ -182,8 +244,19 @@ struct Dependencies {
     let sound: BundledSoundPlayer
     let music: AmbientMusicPlayer
 
-    static func bootstrap() -> Dependencies {
-        let container = makeContainer()
+    static func bootstrap() -> Launch {
+        let container: ModelContainer
+        let storageFailure: String?
+        switch makeStorage() {
+        case .onDisk(let opened):
+            container = opened
+            storageFailure = nil
+        case .inMemory(let opened, let reason):
+            container = opened
+            storageFailure = reason
+        case .unavailable(let reason):
+            return .storageUnavailable(reason: reason)
+        }
         let context = container.mainContext
 
         let theme = ThemeProvider(appVersion: Bundle.main.appVersion)
@@ -223,21 +296,50 @@ struct Dependencies {
             theme: theme
         )
 
-        return Dependencies(container: container, router: router, theme: theme,
-                            preferences: preferences, feedback: feedback,
-                            sound: sound, music: AmbientMusicPlayer(kit: kit))
+        // Работа в памяти обязана быть заметной. Без этого сообщения запуск
+        // после неудачной миграции выглядел как новое приложение: рейтинг,
+        // ранг, рекорды и Daily исчезали молча, а сыгранное за сессию
+        // терялось при выходе.
+        if let storageFailure {
+            router.reportStartupIssue(
+                "Хранилище не открылось, прогресс этой сессии не сохранится. "
+                + "Данные на устройстве не удалены. \(storageFailure)"
+            )
+        }
+
+        return .ready(Dependencies(container: container, router: router, theme: theme,
+                                   preferences: preferences, feedback: feedback,
+                                   sound: sound, music: AmbientMusicPlayer(kit: kit)))
     }
 
-    private static func makeContainer() -> ModelContainer {
+    /// Чем закончилось открытие хранилища.
+    private enum Storage {
+        case onDisk(ModelContainer)
+        /// Диск не открылся, но приложение работает — без сохранения.
+        case inMemory(ModelContainer, reason: String)
+        case unavailable(reason: String)
+    }
+
+    private static func makeStorage() -> Storage {
         let schema = Schema(PersistenceSchema.models)
         let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-        if let container = try? ModelContainer(for: schema, configurations: configuration) {
-            return container
+        do {
+            return .onDisk(try ModelContainer(for: schema, configurations: configuration))
+        } catch {
+            // Файл на диске НЕ удаляем и не пересоздаём. Несовместимая схема
+            // или временный сбой — не повод уничтожать единственную копию
+            // прогресса: она остаётся на месте и после обновления читается.
+            // Причину обрезаем: ошибки SwiftData бывают на десятки строк,
+            // а в предупреждении нужна опознаваемая, а не полная.
+            let reason = String("\(error)".prefix(180))
+            let fallback = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
+            do {
+                return .inMemory(try ModelContainer(for: schema, configurations: fallback),
+                                 reason: reason)
+            } catch {
+                return .unavailable(reason: reason)
+            }
         }
-        // Повреждённое хранилище не должно ронять запуск: работаем в памяти.
-        let fallback = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
-        // swiftlint:disable:next force_try
-        return try! ModelContainer(for: schema, configurations: fallback)
     }
 }
 

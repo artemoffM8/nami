@@ -84,15 +84,8 @@ struct HomeView: View {
         .sheet(isPresented: $showHowToPlay) { HowToPlayView().themedSurface() }
         .sheet(isPresented: $showStatistics) { StatisticsView().themedSurface() }
         .sheet(isPresented: $showDojo) { DojoView().themedSurface() }
-        .alert(
-            router.startupWarning ?? "",
-            isPresented: Binding(
-                get: { router.startupWarning != nil },
-                set: { if !$0 { router.dismissWarning() } }
-            )
-        ) {
-            Button(L.t("common.close")) { router.dismissWarning() }
-        }
+        // Предупреждение переехало на RootView: сбой хранилища виден и на
+        // онбординге, куда пустая база отправляет игрока в первую очередь.
         .onAppear {
             router.refreshSnapshot()
             // Обзор показывается ОДИН раз после онбординга и потом всегда

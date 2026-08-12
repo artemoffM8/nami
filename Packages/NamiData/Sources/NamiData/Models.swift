@@ -285,6 +285,13 @@ public final class UnlockedExperiencePack {
 public enum DomainCoding {
     /// JSONEncoder/JSONDecoder не Sendable, поэтому создаются на месте,
     /// а не хранятся статически: в Swift 6 общий изменяемый кодер — гонка.
+    ///
+    /// Внимание: снисходительный запасной вариант (`Data()` при ошибке)
+    /// годится только там, где потеря блока данных заметна сразу — снимок
+    /// партии не откроется, и игрок это увидит. Для значений, потеря которых
+    /// молчалива, он неприменим: рейтинговый snapshot читается и пишется
+    /// через `RatingSnapshotArchive`, который различает «данных ещё нет» и
+    /// «данные не читаются» и бросает вместо пустых байтов.
     public static func encode<T: Encodable>(_ value: T) -> Data {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys]

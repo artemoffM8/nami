@@ -86,6 +86,42 @@ final class AppRouter {
         self.rhythm = WeeklyRhythm.compute(completionDates: progress.completionDates())
         theme.apply(id: preferences.themeID)
         if !progress.profile().onboardingCompleted { screen = .onboarding }
+        // Первое чтение профиля — самое важное: именно здесь повреждённый
+        // snapshot раньше молча превращался в игрока без рейтинга.
+        surfaceProgressIssue()
+    }
+
+    // MARK: - Целостность прогресса
+
+    /// Сообщение о сбое, обнаруженном до создания роутера (хранилище не
+    /// открылось). Показывается тем же предупреждением, что и остальные.
+    func reportStartupIssue(_ message: String) {
+        startupWarning = message
+    }
+
+    /// `ProgressRepository` не `@Observable`, поэтому накопленный сбой
+    /// забирается явно — в тех же точках, где обновляется snapshot.
+    private func surfaceProgressIssue() {
+        guard let issue = progress.takeIntegrityIssue() else { return }
+        startupWarning = Self.message(for: issue)
+    }
+
+    /// Технический повод превращается в понятную фразу здесь: репозиторий
+    /// не знает интерфейса, а игроку нужно понимать, что произошло с его
+    /// прогрессом и что данные не стёрты.
+    private static func message(for issue: ProgressIntegrityIssue) -> String {
+        switch issue {
+        case .snapshotUnreadable:
+            "Сохранённый прогресс не читается. Рейтинг и ранг временно не обновляются — записи оставлены на месте, чтобы их можно было восстановить."
+        case .profileUnreadable:
+            "Профиль не открылся. Рейтинг и ранг временно не обновляются — сохранённые записи не тронуты."
+        case .snapshotRecovered:
+            "Сохранённый прогресс не читался и восстановлен из последнего засчитанного результата. Мог потеряться только он один; рейтинг снова обновляется."
+        case .snapshotNotEncodable:
+            "Прогресс не удалось подготовить к записи. Последний результат не сохранён."
+        case .writeFailed:
+            "Прогресс не записался на диск. Последний результат может не сохраниться."
+        }
     }
 
     // MARK: - Состояние главного экрана
@@ -99,6 +135,7 @@ final class AppRouter {
     func refreshSnapshot() {
         snapshot = progress.snapshot()
         rhythm = WeeklyRhythm.compute(completionDates: progress.completionDates())
+        surfaceProgressIssue()
     }
 
     // MARK: - Запуск партии
@@ -234,11 +271,20 @@ final class AppRouter {
         let puzzle = store.puzzle
         let isDaily = puzzle.dailyEligible && screenIsDaily(store)
 
+        // Прогресс не читается: считать рейтинг не от чего. `snapshot` в этом
+        // случае — подставной стартовый (1000, калибровка 0), и посчитанный от
+        // него ΔR был бы выдумкой: и на экране, и в поле `ratingAfter`, которое
+        // статистика читает как факт. Партия объявляется нерейтинговой.
+        let progressFrozen = progress.isWriteFrozen
+
         // Повторное решение того же puzzle ID не меняет рейтинг (раздел 9.9).
         let alreadyRanked = progress.hasRankedResult(forPuzzle: puzzle.id)
         var input = store.ratingInput(currentRating: snapshot.rating,
                                       appliedRatedCount: snapshot.calibrationRatedCount)
-        if alreadyRanked {
+        // Два повода закончить партию нерейтингово: задача уже решалась и
+        // прогресс не читается. Формулировка на экране у них разная, а расчёт
+        // одинаковый — ΔR = 0 без отрицательного вклада.
+        if alreadyRanked || progressFrozen {
             var ledger = store.currentLedger
             ledger.record(hintLayer: .reveal)   // «нерейтингово», но без отрицательного ΔR
             input = RatingInput(
@@ -323,7 +369,19 @@ final class AppRouter {
             )
         )
 
-        snapshot = application.snapshot
+        // Сбой репозитория забираем всегда, иначе он всплывёт позже как
+        // предупреждение о постороннем действии.
+        let repositoryIssue = progress.takeIntegrityIssue()
+        if let issue = application.persistenceFailure ?? repositoryIssue {
+            startupWarning = Self.message(for: issue)
+        }
+        // Результат, не дошедший до диска, не двигает рейтинг на экране:
+        // показать новое число и потерять его при перезапуске хуже, чем
+        // честно сказать о сбое. Экран результата при этом остаётся —
+        // партию игрок действительно решил.
+        if application.persistenceFailure == nil {
+            snapshot = application.snapshot
+        }
         rhythm = WeeklyRhythm.compute(completionDates: progress.completionDates())
         savedGames.clear()
 
@@ -339,7 +397,11 @@ final class AppRouter {
             dailyScore: dailyScore,
             promoted: application.event != nil,
             event: application.event,
-            overrideReasonKey: store.currentLedger.perfectFailed ? "result.perfectFailed"
+            // Заморозка объясняется первой: остальные причины при ней
+            // второстепенны, а игрок должен понимать, почему партия не
+            // засчитана, не сверяясь с предупреждением.
+            overrideReasonKey: progressFrozen ? "result.progressFrozen"
+                             : store.currentLedger.perfectFailed ? "result.perfectFailed"
                              : store.currentLedger.restartedWithoutRating ? "result.restarted"
                              : (alreadyRanked ? "result.repeat" : nil),
             personalBestSeconds: progress.personalBest(for: puzzle.tier),
