@@ -5,7 +5,8 @@
 Что проверяется:
   1. project.pbxproj действительно парсится как OpenStep plist;
   2. все ссылки на объекты разрешаются (нет висящих ID);
-  3. каждый .swift из App/Sources попал в PBXSourcesBuildPhase ровно один раз;
+  3. каждый .swift из App/Sources и из каталогов тестов попал в
+     PBXSourcesBuildPhase своего таргета ровно один раз;
   4. каждый файл из дерева групп существует на диске;
   5. каждый локальный пакет объявлен и как XCLocalSwiftPackageReference,
      и как XCSwiftPackageProductDependency таргета;
@@ -182,12 +183,22 @@ def verify_project():
 
     # 3. Все исходники в фазе Sources ровно один раз.
     targets = [objects[t] for t in project["targets"]]
-    check(len(targets) == 2, "ожидались app-таргет и тестовый таргет")
     target = next(t for t in targets
                   if t["productType"] == "com.apple.product-type.application")
-    test_target = next((t for t in targets
-                        if t["productType"] == "com.apple.product-type.bundle.unit-test"), None)
-    check(test_target is not None, "нет unit-test таргета")
+    test_targets = [t for t in targets
+                    if t["productType"] == "com.apple.product-type.bundle.unit-test"]
+    check(bool(test_targets), "нет ни одного unit-test таргета")
+    # Каталоги тестов ищутся на диске, а не берутся из проекта: иначе
+    # проверка спрашивала бы у проекта же, всё ли в нём есть.
+    suites_on_disk = {
+        directory.name: sorted(p.name for p in directory.rglob("*.swift"))
+        for directory in sorted((ROOT / "Packages").glob("*/Tests/*"))
+        if directory.is_dir() and any(directory.rglob("*.swift"))
+    }
+    check(bool(suites_on_disk), "на диске не найдено ни одного каталога тестов")
+    check(len(targets) == 1 + len(suites_on_disk),
+          f"ожидались app-таргет и {len(suites_on_disk)} тестовых, "
+          f"а в проекте {len(targets)} таргетов")
 
     phases = [objects[p] for p in target["buildPhases"]]
     sources_phase = next(p for p in phases if p["isa"] == "PBXSourcesBuildPhase")
@@ -207,6 +218,30 @@ def verify_project():
           f"{sorted(set(compiled) - set(on_disk))}\n  только на диске: "
           f"{sorted(set(on_disk) - set(compiled))}")
     check(len(compiled) == len(set(compiled)), "дубликаты в фазе Sources")
+
+    # То же самое для КАЖДОГО тестового таргета. Тестовый файл — и тем более
+    # целый набор тестов, — которого нет в pbxproj, не роняет ни сборку, ни
+    # прогон: `xcodebuild test` просто не выполняет его, и зелёный отчёт
+    # означает лишь то, что тесты не запускались.
+    by_name = {t["name"]: t for t in test_targets}
+    check(set(by_name) == set(suites_on_disk),
+          f"тестовые таргеты проекта {sorted(by_name)} расходятся с каталогами "
+          f"на диске {sorted(suites_on_disk)} — перегенерируйте проект "
+          f"(Tools/generate_xcodeproj.py, список TEST_TARGETS)")
+    for name, files_on_disk in sorted(suites_on_disk.items()):
+        test_target = by_name.get(name)
+        if test_target is None:
+            continue
+        test_phases = [objects[p] for p in test_target["buildPhases"]]
+        test_sources_phase = next(p for p in test_phases
+                                  if p["isa"] == "PBXSourcesBuildPhase")
+        test_compiled = phase_names(test_sources_phase)
+        check(sorted(test_compiled) == files_on_disk,
+              f"{name}: фаза Sources расходится с диском:\n  только в проекте: "
+              f"{sorted(set(test_compiled) - set(files_on_disk))}\n  только на диске: "
+              f"{sorted(set(files_on_disk) - set(test_compiled))}")
+        check(len(test_compiled) == len(set(test_compiled)),
+              f"{name}: дубликаты в фазе Sources")
 
     bundled = phase_names(resources_phase)
     check("classic.json" in bundled, "каталог задач не попал в ресурсы")
@@ -262,7 +297,17 @@ def verify_project():
     scheme = ROOT / "NamiApp.xcodeproj/xcshareddata/xcschemes/NamiApp.xcscheme"
     check(scheme.exists(), "shared-схема отсутствует")
     if scheme.exists():
-        check(target["name"] in scheme.read_text(), "схема ссылается не на тот таргет")
+        scheme_text = scheme.read_text()
+        check(target["name"] in scheme_text, "схема ссылается не на тот таргет")
+        # Таргет вне <Testables> собирается, но не запускается: тесты есть
+        # в проекте и всё равно молчат.
+        testables = re.search(r"<Testables>(.*?)</Testables>", scheme_text, re.S)
+        check(testables is not None, "в схеме нет секции Testables")
+        listed = set(re.findall(r'BlueprintName="([^"]+)"', testables.group(1))) \
+            if testables else set()
+        check(listed == set(by_name),
+              f"схема запускает {sorted(listed)}, а тестовых таргетов "
+              f"{sorted(by_name)}")
 
 
 def verify_catalog():

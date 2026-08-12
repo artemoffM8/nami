@@ -20,6 +20,7 @@ import os
 import re
 import sys
 from pathlib import Path
+from typing import NamedTuple
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -54,8 +55,34 @@ DEVELOPMENT_TEAM = existing_development_team()
 LOCAL_PACKAGES = ["NamiDomain", "NamiData", "NamiExperience"]
 
 SOURCE_ROOT = Path("App/Sources")
-TEST_TARGET_NAME = "NamiDomainTests"
-TEST_SOURCE_ROOT = Path("Packages/NamiDomain/Tests/NamiDomainTests")
+
+
+class TestTarget(NamedTuple):
+    """Тестовый таргет проекта.
+
+    Тесты пакетов запускаются двумя разными способами: `swift test` видит их
+    по манифесту пакета, `xcodebuild test` — только по pbxproj. Поэтому список
+    таргетов лежит здесь, рядом со списком пакетов: пакет со своими тестами,
+    забытый в этом списке, даёт зелёный прогон, в котором его тесты просто
+    не запускались.
+    """
+
+    name: str
+    # Каталог с тестами; состав .swift всегда берётся с диска.
+    sources: Path
+    # Продукты локальных пакетов, к которым линкуется бандл тестов.
+    products: list[str]
+
+
+TEST_TARGETS = [
+    TestTarget("NamiDomainTests",
+               Path("Packages/NamiDomain/Tests/NamiDomainTests"),
+               ["NamiDomain"]),
+    TestTarget("NamiDataTests",
+               Path("Packages/NamiData/Tests/NamiDataTests"),
+               ["NamiData"]),
+]
+
 RESOURCES = [
     Path("App/Resources/Assets.xcassets"),
     Path("App/Resources/Puzzles/classic.json"),
@@ -250,32 +277,40 @@ def build_objects():
     app_files = sources + RESOURCES + [INFO_PLIST]
     app_group = make_group(Path("App"), app_files)
 
-    # --- Тестовый таргет: logic tests без host-приложения
-    test_sources = sorted(
-        p.relative_to(ROOT) for p in (ROOT / TEST_SOURCE_ROOT).rglob("*.swift")
-    )
-    test_build_files = []
-    for path in test_sources:
-        ref = oid("testref", str(path))
-        file_refs[path] = ref
-        objects[ref] = {
-            "isa": "PBXFileReference",
-            "lastKnownFileType": "sourcecode.swift",
-            "path": path.name,
+    # --- Тестовые таргеты: файлы, build-файлы и группа на каждый набор
+    test_sources: dict[str, list[Path]] = {}
+    test_build_files: dict[str, list[Ref]] = {}
+    test_group_refs: list[Ref] = []
+    for spec in TEST_TARGETS:
+        files = sorted(
+            p.relative_to(ROOT) for p in (ROOT / spec.sources).rglob("*.swift")
+        )
+        if not files:
+            sys.exit(f"Не найдено ни одного .swift в {spec.sources}")
+        test_sources[spec.name] = files
+        test_build_files[spec.name] = []
+        for path in files:
+            ref = oid("testref", str(path))
+            file_refs[path] = ref
+            objects[ref] = {
+                "isa": "PBXFileReference",
+                "lastKnownFileType": "sourcecode.swift",
+                "path": path.name,
+                "sourceTree": "<group>",
+            }
+            build = oid("testbuild", str(path))
+            objects[build] = {"isa": "PBXBuildFile", "fileRef": Ref(ref, path.name)}
+            test_build_files[spec.name].append(Ref(build, f"{path.name} in Sources"))
+
+        test_group = oid("group", "TestsGroup", spec.name)
+        objects[test_group] = {
+            "isa": "PBXGroup",
+            "children": [Ref(file_refs[p], p.name) for p in files],
+            "name": spec.name,
+            "path": str(spec.sources),
             "sourceTree": "<group>",
         }
-        build = oid("testbuild", str(path))
-        objects[build] = {"isa": "PBXBuildFile", "fileRef": Ref(ref, path.name)}
-        test_build_files.append(Ref(build, f"{path.name} in Sources"))
-
-    test_group = oid("group", "TestsGroup")
-    objects[test_group] = {
-        "isa": "PBXGroup",
-        "children": [Ref(file_refs[p], p.name) for p in test_sources],
-        "name": TEST_TARGET_NAME,
-        "path": str(TEST_SOURCE_ROOT),
-        "sourceTree": "<group>",
-    }
+        test_group_refs.append(Ref(test_group, spec.name))
 
     # --- Локальные пакеты: и как ссылки в дереве, и как package references
     packages_children = []
@@ -322,20 +357,25 @@ def build_objects():
         "path": f"{TARGET_NAME}.app",
         "sourceTree": "BUILT_PRODUCTS_DIR",
     }
-    test_product_ref = oid("testproduct")
-    objects[test_product_ref] = {
-        "isa": "PBXFileReference",
-        "explicitFileType": "wrapper.cfbundle",
-        "includeInIndex": 0,
-        "path": f"{TEST_TARGET_NAME}.xctest",
-        "sourceTree": "BUILT_PRODUCTS_DIR",
-    }
+    test_product_refs: dict[str, str] = {}
+    for spec in TEST_TARGETS:
+        ref = oid("testproduct", spec.name)
+        objects[ref] = {
+            "isa": "PBXFileReference",
+            "explicitFileType": "wrapper.cfbundle",
+            "includeInIndex": 0,
+            "path": f"{spec.name}.xctest",
+            "sourceTree": "BUILT_PRODUCTS_DIR",
+        }
+        test_product_refs[spec.name] = ref
+
     products_group = oid("group", "Products")
     objects[products_group] = {
         "isa": "PBXGroup",
         "children": [
             Ref(product_ref, f"{TARGET_NAME}.app"),
-            Ref(test_product_ref, f"{TEST_TARGET_NAME}.xctest"),
+            *[Ref(test_product_refs[spec.name], f"{spec.name}.xctest")
+              for spec in TEST_TARGETS],
         ],
         "name": "Products",
         "sourceTree": "<group>",
@@ -347,7 +387,7 @@ def build_objects():
         "children": [
             Ref(app_group, "App"),
             Ref(packages_group, "Packages"),
-            Ref(test_group, TEST_TARGET_NAME),
+            *test_group_refs,
             Ref(products_group, "Products"),
         ],
         "sourceTree": "<group>",
@@ -433,8 +473,8 @@ def build_objects():
         "TARGETED_DEVICE_FAMILY": "1,2",
     }
 
-    def config(name: str, settings: dict, key: str) -> str:
-        cfg = oid("config", key, name)
+    def config(name: str, settings: dict, *key: str) -> str:
+        cfg = oid("config", *key, name)
         objects[cfg] = {
             "isa": "XCBuildConfiguration",
             "buildSettings": settings,
@@ -487,74 +527,82 @@ def build_objects():
         "productType": "com.apple.product-type.application",
     }
 
-    # --- Тестовый таргет
-    test_sources_phase = oid("phase", "testsources")
-    objects[test_sources_phase] = {
-        "isa": "PBXSourcesBuildPhase",
-        "buildActionMask": 2147483647,
-        "files": test_build_files,
-        "runOnlyForDeploymentPostprocessing": 0,
-    }
-    test_frameworks_phase = oid("phase", "testframeworks")
-    objects[test_frameworks_phase] = {
-        "isa": "PBXFrameworksBuildPhase",
-        "buildActionMask": 2147483647,
-        "files": [],
-        "runOnlyForDeploymentPostprocessing": 0,
-    }
-    test_product_dep = oid("testproductdep", "NamiDomain")
-    objects[test_product_dep] = {
-        "isa": "XCSwiftPackageProductDependency",
-        "productName": "NamiDomain",
-    }
+    # --- Тестовые таргеты
+    # Logic tests: без TEST_HOST и BUNDLE_LOADER — ни доменный слой, ни
+    # хранилище не требуют запущенного приложения (ModelContainer поднимается
+    # в памяти), поэтому тесты идут быстрее и стабильнее.
+    test_target_ids: dict[str, str] = {}
+    for spec in TEST_TARGETS:
+        test_sources_phase = oid("phase", "testsources", spec.name)
+        objects[test_sources_phase] = {
+            "isa": "PBXSourcesBuildPhase",
+            "buildActionMask": 2147483647,
+            "files": test_build_files[spec.name],
+            "runOnlyForDeploymentPostprocessing": 0,
+        }
+        test_frameworks_phase = oid("phase", "testframeworks", spec.name)
+        objects[test_frameworks_phase] = {
+            "isa": "PBXFrameworksBuildPhase",
+            "buildActionMask": 2147483647,
+            "files": [],
+            "runOnlyForDeploymentPostprocessing": 0,
+        }
 
-    # Logic tests: без TEST_HOST и BUNDLE_LOADER — доменный слой не требует
-    # запущенного приложения, поэтому тесты идут быстрее и стабильнее.
-    test_settings = {
-        "BUNDLE_LOADER": "",
-        "CODE_SIGN_STYLE": "Automatic",
-        "CURRENT_PROJECT_VERSION": "1",
-        "GENERATE_INFOPLIST_FILE": "YES",
-        "MARKETING_VERSION": MARKETING_VERSION,
-        "PRODUCT_BUNDLE_IDENTIFIER": f"{BUNDLE_ID}.tests",
-        "PRODUCT_NAME": "$(TARGET_NAME)",
-        "SWIFT_EMIT_LOC_STRINGS": "NO",
-        "TARGETED_DEVICE_FAMILY": "1,2",
-    }
-    test_settings.pop("BUNDLE_LOADER")
+        test_deps = []
+        for product in spec.products:
+            dep = oid("testproductdep", spec.name, product)
+            objects[dep] = {
+                "isa": "XCSwiftPackageProductDependency",
+                "productName": product,
+            }
+            test_deps.append(Ref(dep, product))
 
-    test_debug_id = config("Debug", dict(test_settings), "testtarget")
-    test_release_id = config("Release", dict(test_settings), "testtarget")
-    test_config_list = oid("configlist", "testtarget")
-    objects[test_config_list] = {
-        "isa": "XCConfigurationList",
-        "buildConfigurations": [
-            Ref(test_debug_id, "Debug"),
-            Ref(test_release_id, "Release"),
-        ],
-        "defaultConfigurationIsVisible": 0,
-        "defaultConfigurationName": "Release",
-    }
+        test_settings = {
+            "CODE_SIGN_STYLE": "Automatic",
+            "CURRENT_PROJECT_VERSION": "1",
+            "GENERATE_INFOPLIST_FILE": "YES",
+            "MARKETING_VERSION": MARKETING_VERSION,
+            # У каждого бандла свой идентификатор: два тестовых таргета с
+            # одинаковым bundle id симулятор считает одним и тем же бандлом.
+            "PRODUCT_BUNDLE_IDENTIFIER": f"{BUNDLE_ID}.{spec.name}",
+            "PRODUCT_NAME": "$(TARGET_NAME)",
+            "SWIFT_EMIT_LOC_STRINGS": "NO",
+            "TARGETED_DEVICE_FAMILY": "1,2",
+        }
 
-    test_target_id = oid("target", TEST_TARGET_NAME)
-    objects[test_target_id] = {
-        "isa": "PBXNativeTarget",
-        "buildConfigurationList": Ref(
-            test_config_list,
-            f"Build configuration list for PBXNativeTarget \"{TEST_TARGET_NAME}\""
-        ),
-        "buildPhases": [
-            Ref(test_sources_phase, "Sources"),
-            Ref(test_frameworks_phase, "Frameworks"),
-        ],
-        "buildRules": [],
-        "dependencies": [],
-        "name": TEST_TARGET_NAME,
-        "packageProductDependencies": [Ref(test_product_dep, "NamiDomain")],
-        "productName": TEST_TARGET_NAME,
-        "productReference": Ref(test_product_ref, f"{TEST_TARGET_NAME}.xctest"),
-        "productType": "com.apple.product-type.bundle.unit-test",
-    }
+        test_debug_id = config("Debug", dict(test_settings), "testtarget", spec.name)
+        test_release_id = config("Release", dict(test_settings), "testtarget", spec.name)
+        test_config_list = oid("configlist", "testtarget", spec.name)
+        objects[test_config_list] = {
+            "isa": "XCConfigurationList",
+            "buildConfigurations": [
+                Ref(test_debug_id, "Debug"),
+                Ref(test_release_id, "Release"),
+            ],
+            "defaultConfigurationIsVisible": 0,
+            "defaultConfigurationName": "Release",
+        }
+
+        test_target_id = oid("target", spec.name)
+        objects[test_target_id] = {
+            "isa": "PBXNativeTarget",
+            "buildConfigurationList": Ref(
+                test_config_list,
+                f"Build configuration list for PBXNativeTarget \"{spec.name}\""
+            ),
+            "buildPhases": [
+                Ref(test_sources_phase, "Sources"),
+                Ref(test_frameworks_phase, "Frameworks"),
+            ],
+            "buildRules": [],
+            "dependencies": [],
+            "name": spec.name,
+            "packageProductDependencies": test_deps,
+            "productName": spec.name,
+            "productReference": Ref(test_product_refs[spec.name], f"{spec.name}.xctest"),
+            "productType": "com.apple.product-type.bundle.unit-test",
+        }
+        test_target_ids[spec.name] = test_target_id
 
     # --- Project
     project_id = oid("project", PROJECT_NAME)
@@ -566,7 +614,8 @@ def build_objects():
             "LastUpgradeCheck": 1600,
             "TargetAttributes": {
                 target_id: {"CreatedOnToolsVersion": "16.0"},
-                test_target_id: {"CreatedOnToolsVersion": "16.0"},
+                **{test_target_ids[spec.name]: {"CreatedOnToolsVersion": "16.0"}
+                   for spec in TEST_TARGETS},
             },
         },
         "buildConfigurationList": Ref(project_config_list, f"Build configuration list for PBXProject \"{PROJECT_NAME}\""),
@@ -579,10 +628,13 @@ def build_objects():
         "productRefGroup": Ref(products_group, "Products"),
         "projectDirPath": "",
         "projectRoot": "",
-        "targets": [Ref(target_id, TARGET_NAME), Ref(test_target_id, TEST_TARGET_NAME)],
+        "targets": [
+            Ref(target_id, TARGET_NAME),
+            *[Ref(test_target_ids[spec.name], spec.name) for spec in TEST_TARGETS],
+        ],
     }
 
-    return objects, project_id, target_id, test_target_id, len(sources), len(test_sources)
+    return objects, project_id, target_id, test_target_ids, len(sources), test_sources
 
 
 # ------------------------------------------------------------------ scheme
@@ -600,29 +652,11 @@ SCHEME_TEMPLATE = """<?xml version="1.0" encoding="UTF-8"?>
                ReferencedContainer="container:{project}.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
-         <BuildActionEntry buildForTesting="YES" buildForRunning="NO" buildForProfiling="NO" buildForArchiving="NO" buildForAnalyzing="NO">
-            <BuildableReference
-               BuildableIdentifier="primary"
-               BlueprintIdentifier="{test_target_id}"
-               BuildableName="{test_target}.xctest"
-               BlueprintName="{test_target}"
-               ReferencedContainer="container:{project}.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-      </BuildActionEntries>
+{test_build_entries}      </BuildActionEntries>
    </BuildAction>
    <TestAction buildConfiguration="Debug" selectedDebuggerIdentifier="Xcode.DebuggerFoundation.Debugger.LLDB" selectedLauncherIdentifier="Xcode.DebuggerFoundation.Launcher.LLDB" shouldUseLaunchSchemeArgsEnv="YES">
       <Testables>
-         <TestableReference skipped="NO" parallelizable="YES">
-            <BuildableReference
-               BuildableIdentifier="primary"
-               BlueprintIdentifier="{test_target_id}"
-               BuildableName="{test_target}.xctest"
-               BlueprintName="{test_target}"
-               ReferencedContainer="container:{project}.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-      </Testables>
+{testables}      </Testables>
    </TestAction>
    <LaunchAction buildConfiguration="Debug" selectedDebuggerIdentifier="Xcode.DebuggerFoundation.Debugger.LLDB" selectedLauncherIdentifier="Xcode.DebuggerFoundation.Launcher.LLDB" launchStyle="0" useCustomWorkingDirectory="NO" ignoresPersistentStateOnLaunch="NO" debugDocumentVersioning="YES" debugServiceExtension="internal" allowLocationSimulation="YES">
       <BuildableProductRunnable runnableDebuggingMode="0">
@@ -651,11 +685,55 @@ SCHEME_TEMPLATE = """<?xml version="1.0" encoding="UTF-8"?>
 </Scheme>
 """
 
+# Блоки на каждый тестовый таргет. Таргет, которого нет в <Testables>,
+# собирается, но `xcodebuild test` его не запускает — прогон зелёный,
+# а тесты не выполнялись.
+SCHEME_TEST_BUILD_ENTRY = """         <BuildActionEntry buildForTesting="YES" buildForRunning="NO" buildForProfiling="NO" buildForArchiving="NO" buildForAnalyzing="NO">
+            <BuildableReference
+               BuildableIdentifier="primary"
+               BlueprintIdentifier="{test_target_id}"
+               BuildableName="{test_target}.xctest"
+               BlueprintName="{test_target}"
+               ReferencedContainer="container:{project}.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+"""
+
+SCHEME_TESTABLE = """         <TestableReference skipped="NO" parallelizable="YES">
+            <BuildableReference
+               BuildableIdentifier="primary"
+               BlueprintIdentifier="{test_target_id}"
+               BuildableName="{test_target}.xctest"
+               BlueprintName="{test_target}"
+               ReferencedContainer="container:{project}.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+"""
+
+
+def scheme_body(target_id: str, test_target_ids: dict[str, str]) -> str:
+    """Схема со всеми тестовыми таргетами в сборке и в прогоне."""
+    def blocks(template: str) -> str:
+        return "".join(
+            template.format(test_target_id=test_target_ids[spec.name],
+                            test_target=spec.name,
+                            project=PROJECT_NAME)
+            for spec in TEST_TARGETS
+        )
+
+    return SCHEME_TEMPLATE.format(
+        target_id=target_id,
+        target=TARGET_NAME,
+        project=PROJECT_NAME,
+        test_build_entries=blocks(SCHEME_TEST_BUILD_ENTRY),
+        testables=blocks(SCHEME_TESTABLE),
+    )
+
 
 # ------------------------------------------------------------------ main
 
 def main() -> None:
-    objects, project_id, target_id, test_target_id, source_count, test_count = build_objects()
+    objects, project_id, target_id, test_target_ids, source_count, test_sources = build_objects()
 
     document = {
         "archiveVersion": 1,
@@ -674,9 +752,7 @@ def main() -> None:
     (project_dir / "project.pbxproj").write_text(body, encoding="utf-8")
 
     (project_dir / "xcshareddata" / "xcschemes" / f"{PROJECT_NAME}.xcscheme").write_text(
-        SCHEME_TEMPLATE.format(target_id=target_id, target=TARGET_NAME,
-                               test_target_id=test_target_id, test_target=TEST_TARGET_NAME,
-                               project=PROJECT_NAME),
+        scheme_body(target_id, test_target_ids),
         encoding="utf-8",
     )
 
@@ -707,7 +783,8 @@ def main() -> None:
 
     print(f"Готово: {project_dir.relative_to(ROOT)}")
     print(f"  Swift-файлов в таргете: {source_count}")
-    print(f"  Тестовых файлов в {TEST_TARGET_NAME}: {test_count}")
+    for spec in TEST_TARGETS:
+        print(f"  Тестовых файлов в {spec.name}: {len(test_sources[spec.name])}")
     print(f"  Локальных пакетов: {', '.join(LOCAL_PACKAGES)}")
     print(f"  Deployment target: iOS {DEPLOYMENT_TARGET}, Swift {SWIFT_VERSION}")
 
