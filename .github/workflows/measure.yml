@@ -1,0 +1,25 @@
+name: verifier-metrics
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify and measure
+        run: |
+          python3 Tools/measure_verifier.py --output /tmp/nami-verifier.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path("/tmp/nami-verifier.json").read_text())
+          assert data["schema_version"] == 1
+          assert data["exit_code"] == 0
+          assert data["duration_ms"] >= 0
+          PY
